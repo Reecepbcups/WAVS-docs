@@ -1,0 +1,84 @@
+---
+title: Contracts
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+
+
+
+## Trigger contract
+
+Triggers are EVM events that are used to trigger a service component to be run by an operator. A basic AVS is comprised of a trigger and a service component. This pair is called a workflow. The service component is the core logic of the service, and the trigger defines which event should cause the service logic to be run. Operators listen for events based on triggers, run the corresponding service component, and submit the response onchain, successfully completing the workflow.
+
+
+A basic trigger contract manages and organizes workflows that trigger a service component to be run. The contract allows triggers to be created, stored, and retrieved. Each trigger is identified with a `TriggerId`. The contract maintains mappings to store triggers by their ID and to associate creators with their respective triggers.
+
+```solidity
+    struct Trigger {
+        string serviceId;
+        string workflowId;
+        address creator;
+        bytes data;
+    }
+```
+
+The `addTrigger()` function allows a new trigger to be added to prompt a service. When a new trigger is added, a `NewTrigger` event is emitted to alert operators that are listening for the trigger. This event contains the `serviceId`, the `workflowId`, and a `triggerId`. Each time a trigger is added, the `triggerId` is incremented.
+
+## Service Manager contract
+
+The Service Manager contract acts as the intermediary responsible for processing, validating, and storing data submitted by operators in response to triggers.
+
+Operators listen for `NewTrigger` events emitted by the Trigger contract, execute the corresponding Service component off-chain, and submit their responses as signed payloads to the Service Manager Contract. These responses complete the workflow initiated by the trigger.
+
+The contract validates the payloads, stores them on-chain, and provides mechanisms to batch-process multiple payloads. Each payload contains a `TriggerId` from a specific trigger and its associated data.
+
+```solidity
+struct SignedPayload {
+    Payload payload;
+    bytes signature;
+}
+
+struct Payload {
+    ILayerTrigger.TriggerId triggerId;
+    bytes data;
+}
+```
+
+The `addSignedPayloadForTrigger()` function enables operators to submit signed payloads for specific triggers. These payloads contain the trigger's unique ID (TriggerId) and the associated data.
+
+
+
+## Core contracts
+
+Eigenlayer core contracts are necessary to deploy the WAVS stack and connect to EigenLayer for developing locally.
+
+The following contracts are used by WAVS as a service on EigenLayer.
+
+
+- [Proxy Admin](https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.7.1/contracts/proxy/transparent/ProxyAdmin.sol): Enables authorized upgrades and administration of upgradeable proxy contracts by providing a secure interface for implementing new contract logic while preserving state.
+- [Delegation Manager](https://github.com/Layr-Labs/eigenlayer-contracts/blob/slashing-magnitudes/src/contracts/core/DelegationManager.sol): Handles the delegation of restaked assets from stakers to operators in EigenLayer by managing delegations, tracking shares, and enforcing withdrawal delays.
+- [Strategy Manager](https://github.com/Layr-Labs/eigenlayer-contracts/blob/slashing-magnitudes/src/contracts/core/StrategyManager.sol): Used for the management of staker funds, allowing deposits, withdrawals, delegation, and slashing of assets across whitelisted strategies.
+- [Eigen Pod Manager](https://github.com/Layr-Labs/eigenlayer-contracts/blob/bda003385c5fec59e35196dc14d01f17d1eb7001/src/contracts/pods/EigenPodManager.sol): Facilitates the creation and management of EigenPods, allowing users to deploy their own pods, stake for new beacon chain validators, track restaked balances, and manage withdrawals.
+- [Eigen Pod (Beacon)](https://github.com/Layr-Labs/eigenlayer-contracts/blob/bda003385c5fec59e35196dc14d01f17d1eb7001/src/contracts/pods/EigenPod.sol): An interface for restaking ETH, enabling staking, managing validator balances, handling proofs, and tracking restaked funds.
+- [Pauser Registry](https://github.com/Layr-Labs/eigenlayer-contracts/blob/0139d6213927c0a7812578899ddd3dda58051928/src/contracts/permissions/PauserRegistry.sol): Manages roles for pausing EigenLayer functionality in [emergency situations](https://docs.eigenlayer.xyz/eigenlayer/security/multisig-governance).
+- [Strategy Factory](https://github.com/Layr-Labs/eigenlayer-contracts/blob/slashing-magnitudes/src/contracts/strategies/StrategyFactory.sol): Used for creating new strategies for permissionless strategy creation.
+- [AVS Directory](https://github.com/Layr-Labs/eigenlayer-contracts/blob/slashing-magnitudes/src/contracts/core/AVSDirectory.sol): Manages the registration and deregistration of operators to AVSs.
+- [Rewards coordinator](https://github.com/Layr-Labs/eigenlayer-contracts/blob/mainnet/src/contracts/core/RewardsCoordinator.sol): manages the distribution and claiming of ERC20 rewards from AVSs to operators and stakers.
+
+Visit the [EigenLayer Contracts Repo](https://github.com/Layr-Labs/eigenlayer-contracts) to learn more about core contracts.
+
+## Service contracts
+
+Service contracts are unique to each AVS building on WAVS. They contain information and configuration, including service triggers, a service manager, and restaking information.
+
+```
+CLI_EIGEN_SERVICE_PROXY_ADMIN="0xD49a0e9A4CD5979aE36840f542D2d7f02C4817Be"
+CLI_EIGEN_SERVICE_MANAGER="0x66F625B8c4c635af8b74ECe2d7eD0D58b4af3C3d"
+CLI_EIGEN_SERVICE_TRIGGER="0x5D42EBdBBa61412295D7b0302d6F50aC449Ddb4F"
+CLI_EIGEN_SERVICE_STAKE_REGISTRY="0xc582Bc0317dbb0908203541971a358c44b1F3766"
+CLI_EIGEN_SERVICE_STAKE_TOKEN="0x74Cf9087AD26D541930BaC724B7ab21bA8F00a27"
+```
+
+{/* TODO: more research on eigenlayer service contracts or references to add here. */}
+

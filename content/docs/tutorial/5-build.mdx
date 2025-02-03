@@ -1,0 +1,30 @@
+---
+title: 5. Build and test
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+
+## Build your component
+
+Use the following command to build your component:
+
+```bash
+just wasi-build eth-trigger-reece-weather
+```
+
+## Test your component
+
+The following commands will allow you to test your component by running it in a mock environment.
+
+1. Export your [Open Weather API key](https://home.openweathermap.org/api_keys). Make sure to add your OpenWeather API key to the command below.
+
+```bash
+export WAVS_ENGINE_ENV_OPEN_WEATHER_API_KEY="<your-key-here>"
+```
+
+2. The following command will simulate running just the component itself in the runtime with the input `Nashville,Tn`.
+
+```bash
+just cli-exec ./components/eth_trigger_reece_weather.wasm Nashville,TN
+```

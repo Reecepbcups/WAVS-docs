@@ -1,0 +1,83 @@
+---
+title: 2. System setup
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+Follow these steps to set up your system for building with WAVS.
+
+## Environment
+
+1. Install [VS Code](https://code.visualstudio.com/download) and the [Solidity extension](https://marketplace.visualstudio.com/items?itemName=JuanBlanco.solidity) if you don't already have it.
+
+## Install Rust
+
+2. Select an operating system to install Rust.
+
+<Tabs items={["OSX", "Linux", "Windows"]}>
+  <Tab value="OSX">
+
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+
+  </Tab>
+  <Tab value="Linux">
+
+    ```bash
+    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
+    ```
+
+  </Tab>
+  <Tab value="Windows">
+
+    Download and install the [rustup-init.exe](https://win.rustup.rs/) file.
+
+  </Tab>
+</Tabs>
+
+You can visit the official [Rust installation site](https://www.rust-lang.org/tools/install) for more information.
+
+## Install Foundry
+
+[Foundry](https://book.getfoundry.sh/) is a solidity development suite. The Foundry toolchain contains Anvil (a local testnet node), Forge (build and test smart contracts), Cast (an RPC call CLI), and Chisel (a Solidity REPL).
+
+
+3. Install Foundryup, the official Foundry installer.
+
+```bash
+curl -L https://foundry.paradigm.xyz | bash
+```
+
+4. Install Foundry
+
+```bash
+foundryup
+```
+
+## Install Just
+
+[Just](https://github.com/casey/just) is a tool for managing and running task scripts.
+
+5. Run the following command:
+
+```bash
+cargo install just
+```
+
+## Install Docker
+
+https://www.docker.com/
+
+6. Follow [Docker's installation](https://docs.docker.com/get-started/get-docker/) instructions.
+
+Make sure Docker is running before running the commands in this tutorial.
+
+## Clone WAVS
+
+7. Enter the following commands to clone the [WAVS repo](https://github.com/Lay3rLabs/WAVS), checkout the `reece/january-building-your-wavs` branch, and enter the WAVS directory:
+
+```bash
+git clone git@github.com:Lay3rLabs/WAVS.git --branch reece/january-building-your-wavs
+cd WAVS
+```

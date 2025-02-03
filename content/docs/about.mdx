@@ -1,0 +1,57 @@
+---
+title: WAVS Benefits
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+<img alt="WAVS" src="/wavs.png" />
+
+>WAVS is a platform that makes building AVSs easier.
+
+**The problem**: creating an AVS the traditional way is complicated. It requires a lot of preliminary development work, such as building custom contracts, scaffolding infrastructure, working with Dockerized components, and coordinating with operators. Most of the development centers around creating AVS infrastructure, which is generally more complicated than the core logic of the service itself.
+
+**There is an easier way**: WAVS provides a base layer of AVS infrastructure so you can focus solely on creating the core logic of your service. This logic is written in Rust (with other languages available soon) and compiled as a lightweight WASI component which can be deployed to the WAVS platform and be run as an AVS by operators. These components are run offchain by operators in the WAVS (WASI-AVS) runtime at near-native speed, and the results are brought verifiably onchain. A service of services, WAVS allows an AVS to dynamically run and manage multiple components that work together to build flexible and intelligent applications.
+
+## Why WAVS?
+
+WAVS redefines the AVS paradigm, making AVSs easier to build, less expensive to run, and enabling the next generation of composable, intelligent blockchain protocols.
+
+1. Dynamic and Cost-Effective Service Management
+    - Flexibility: Add, update, or manage components dynamically without having to coordinate upgrades with an entire operator set.
+    - Cost-effective and performant: Multiple AVSs run on the WAVS runtime
+        - WASI service components are lightweight compared to Docker, saving storage and startup time.
+        - WASI components have instantaneous initialization vs. Docker's redundant OS layers and slower boot times.
+2. Simplified Development
+    - Focus on your application logic, not overhead:
+        - With templates, there’s no need to write multiple custom contracts to parse events or aggregate signatures.
+        - WAVS handles common AVS infrastructure, leaving AVS developers to focus on their core logic.
+3. Multichain Ready
+    - WAVS is built to operate across multiple blockchain environments and will be released with support for EVM networks like Ethereum.
+    - WAVS will foster a multichain ecosystem for AVSs to interact and interoperate.
+4. Intelligent Protocols & Composability
+    - Enable asynchronous, verifiable execution flows across multiple on and offchain components.
+    - Compose multiple services to create dynamic intelligent protocols that surpass the limitations of traditional smart contracts.
+
+## Build your AVS
+
+WAVS is a platform to build and run AVSs quickly and securely. Most web3 applications rely on centralized infrastructure and legacy systems to function, undermining the goal of decentralized applications. Instead of relying on these systems, WAVS leverages Ethereum security via Eigenlayer to enable fully customizable AVSs that can run arbitrary functions off-chain and be verified on-chain in a decentralized manner. Through the power of WASM, WAVS allows you to build full-stack decentralized applications.
+
+## What is an AVS?
+
+AVSs (Actively Validated Services) are computational services that are run offchain and that can be verified onchain. Traditional smart contracts are limited in that they are only designed to run verifiable onchain functions. However, most real-world applications rely on offchain processes to function. Because blockchains are opaque to the validity of offchain data, there needs to be some way to verify offchain processes. This is where AVSs come in.
+
+AVSs enable the execution of off-chain computational processes and bring the results of these processes onchain in a verifiable way. To achieve this, AVSs use node participants called operators to run their processes. When a process is run offchain by an operator, the results are then checked by a verifier contract which verifies that multiple operators have run the process and that the result is accurate. AVSs can configure their operator set and parameters in their onchain contracts.
+
+AVSs can be any offchain process that can be run and verified by an operator, including simple mathematical computations, price oracles, decentralized front-ends, defi applications, and even decentralized AI agents. By leveraging economic security from Ethereum, WAVS enables a new generation of applications and general compute that can be decentralized at every point, both off and onchain.
+
+## WASM
+
+[Web Assembly (WASM)](https://webassembly.org/) is a high-performance, low-level binary format that can be compiled from code written in a variety of languages. It provides a secure, sandboxed environment, ensuring safe execution by isolating code from the host system. WASM can even be run in web browsers at near-native speed. With the power of WASM, AVSs built with WAVS are lightning-fast, lightweight, and easy to build.
+
+## Services
+
+Services are the core functionality of an AVS. A WAVS service consists of WASI components, which contain the logic to be run offchain. Services are compiled to WebAssembly and runs in a [WASI (WebAssembly System Interface)](https://wasi.dev/) environment.
+
+AVS developers can create services using WASM components for operators to run offchain and verify onchain, enabling an ecosystem of decentralized computation and applications. AVS WASM components can be any arbitrary computational processes an AVS may need to function.
+
+While other AVS platforms require thousands of lines of code across multiple files to run a simple computational task, a Service built using WAVS can be created in only a few lines of a single file. [Visit the WAVS Squaring Service Example](/examples/squaring) to see how lightweight and powerful building a service with WAVS can be.

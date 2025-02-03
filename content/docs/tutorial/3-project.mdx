@@ -1,0 +1,104 @@
+---
+title: 3. Project setup
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+## Clone WAVS
+
+1. Clone the [WAVS repo](https://github.com/Lay3rLabs/WAVS) and checkout the `reece/january-building-your-wavs` branch. You'll be building your project from this branch.
+
+```bash
+git clone git@github.com:Lay3rLabs/WAVS.git --branch reece/january-building-your-wavs
+```
+
+2. Enter the WAVS directory.
+
+```bash
+cd WAVS
+```
+
+## Modify `max_wasm_fuel`
+
+Open `packages/wavs/wavs.toml` and modify the `max_wasm_fuel` to `100_000_000`
+
+```toml
+max_wasm_fuel = 100_000_000
+```
+
+## Environment setup
+
+Use the following command to copy the `/env` files from the examples.
+
+```bash
+cp packages/cli/.env.example packages/cli/.env
+cp packages/wavs/.env.example packages/wavs/.env
+```
+
+## Set up your project
+
+1. Set up a new project by copying the `examples/eth-trigger-echo` example.
+
+```bash
+cp -r examples/eth-trigger-echo examples/eth-trigger-reece-weather
+```
+
+2. Update the paths in `cargo.toml`.
+
+```bash
+sed -i -e 's/eth-trigger-echo/eth-trigger-reece-weather/g' examples/eth-trigger-reece-weather/Cargo.toml
+```
+
+3. Run the following command in your terminal to open `examples/Cargo.toml` in VS Code.
+
+```
+code examples/Cargo.toml
+```
+
+4. Add your project to the workspace by pasting `"eth-trigger-reece-weather",` in the `[workspace] members` array.
+
+```toml
+[workspace]
+members = [
+  "btc-avg",
+  "composition/http-allow-list/http-allowed-coingecko",
+  "square",
+  "permissions",
+  "ai-bouncer",
+  "eth-event-echo",
+  "eth-trigger-echo",
+  "eth-trigger-square",
+  "eth-cosmos-query",
+  "eth-trigger-reece-weather", # <- Add this one
+]
+```
+
+## Update your project's Cargo.toml
+
+The following steps all take place in the `examples/eth-trigger-reece-weather/Cargo.toml` file.
+
+1. Open `examples/eth-trigger-reece-weather/Cargo.toml` and update `name=` under `[package]` to `"eth-trigger-reece-weather"`
+
+```toml
+[package]
+name = "eth-trigger-reece-weather" # Update this line
+
+```
+
+2. Under `[dependencies]`, add the following:
+
+```toml
+[dependencies]
+wit-bindgen-rt = { workspace = true, features = ["bitflags"] }
+layer-wasi = { workspace = true } # Needed to interact with the WAVS runtime
+serde = { workspace = true, features = ["derive"] } # for JSON conversion
+serde_json = {workspace = true} # for JSON conversion
+reqwest = {version = "0.12.12"} # Makes requests for you
+```
+
+3. Update the package name:
+
+```toml
+[package.metadata.component]
+package = "component:eth-trigger-reece-weather" # Update this line
+```

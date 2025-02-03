@@ -1,0 +1,99 @@
+---
+title: How it works
+---
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+WAVS is a next-generation AVS (Actively Validated Service) platform, making it easy to create, manage, and operate high-performance AVSs. By providing a base layer of AVS infrastructure, WAVS allows builders to focus solely on implementing the core logic of their services, which are written in Rust (with support for more languages coming soon), compiled to WASM, and deployed as lightweight service components. Triggered by onchain events, these components are run offchain by operators in the WAVS (WASI-AVS) runtime at near-native speed, and the results are brought verifiably onchain.
+
+WAVS will initially be launched as a service on EigenLayer, utilizing EigneLayer restaking to secure AVSs built on WAVS. A service of services, WAVS allows an AVS to dynamically run and manage multiple components that work together to build flexible and intelligent applications.
+
+The WAVS platform consists of several different components which work together to form a decentralized offchain execution layer for AVSs whose results can be verified onchain.
+
+- [Service Components](#service-components): WASI components written in Rust (with support for other languages coming soon) that contain the core logic of a service.
+- [Triggers](#triggers): defined events that trigger a component to be run.
+- [The WAVS runtime](#wavs-runtime): the runtime environment where services are run.
+- [Operators](#operators): node participants that opt into running services.
+
+
+<img alt="WAVS overview" src="/wavs-contract.png" />
+
+
+## Service Components
+
+Service components are the heart of the WAVS platform, encapsulating the core logic that powers a service. They consist of a single file (`lib.rs`) written in Rust (with support for other languages coming soon) which contains all of the necessary computational logic to run a service. These service components are compiled to WASM and are uploaded to the WAVS platform where they can be run by operators. In the WAVS runtime, service components are sandboxed from each other and from the node's operating system. This way, operators and AVS services maintain a clean separation, with AVS builders defining service components and operators having to opt-in to each service.
+
+Service components are lightweight and built for adaptability. Building a service used to take thousands of lines of code and the configuration of dozens of files to execute even the simplest logic. With WAVS, service components can consist of a few lines of code that can be dynamically deployed to the WAVS platform.
+
+Service components are also designed for composability: an AVS can chain multiple components together, creating decentralized flows of offchain and offchain executions, enabling next-generation decentralized applications. These intelligent protocols merge the performance of offchain computation with onchain verifiability and creating a complex mesh of decentralized transaction flows.
+
+
+## Triggers
+
+When creating a service, an AVS builder will specify which onchain events will trigger a service component to be run by operators. Triggers are EVM events that are used to prompt a task to be run. A basic AVS is comprised of a trigger and a service component. This pair is called a workflow. The service component is the core logic of the service, and the trigger defines which event should cause the service logic to be run. Operators listen for events based on triggers, and run the corresponding service component.
+
+WAVS is built for flexibilty, so there are a few different types of triggers to choose from:
+
+- Onchain events: events emitted from smart contracts.
+- Cron jobs: triggers that run at specific times or intervals.
+- Offchain events: external services, http events, user input, etc.
+
+Both onchain and offchain event triggers can be used to pass arbitrary data as the inputs for service components to be run.
+
+## WAVS runtime
+
+The WAVS (WASI-AVS) runtime serves as the offchain execution environment for all services that run on the WAVS platform. Powered by operators running the WAVS node software, you can think of the WAVS runtime as a lightweight OS specifically designed to run WASM service components in a secure and controlled environment. Service components are like the programs that interact with this "mini-OS" using the WASI interface. WASI is a standard set of APIs that allow WASM service components to interact with low-level operations like filesystems and system-level settings.
+
+There are significant advantages in leveraging a WASM/WASI-based platform for AVSs:
+
+- Lightweight execution: Service components are lightweight WASM binaries ideal for high-frequency, low-latency AVS tasks.
+- Speed: components can run in the WASI environment at near-native speeds, providing a significant advantage over Dockerized AVSs.
+- Low overhead: Instead of each service needing its own dedicated docker container, the WAVS runtime provides a computational layer that can be used by many components, saving storage and startup time.
+- Dynamic deployment: to upgrade a service, simply upload a new component and update your service metadata to point to the new component. No more downtime or coordination of new binaries among operators.
+- Security and separation: The WAVS WASI runtime enforces security by sandboxing service components, allowing them to interact with the host (WAVS) only through explicitly permitted WASI APIs.
+
+## Service manifest (WIP)
+
+
+
+<img alt="WAVS overview" src="/wavs-manifest.png" />
+
+A service manifest defines all of the component parts that make up an individual AVS. The manifest is a JSON object that contains all of the necessary information on the configuration of a specific service, including the trigger, service component, service id, and operator registry.
+
+## Operators
+
+Operators are network participants that run the WAVS runtime and "operate" different services.  Similar to validators in a proof of stake network, users can stake (or restake) to operators and provide cryptoeconomic security to services.
+
+Operators can opt-in to running different services by registering with them. Once registered, operators listen for onchain triggers and run the associated service component offchain, completing a workflow. Then, the operator takes the result of the workflow, verifies it, and submits it onchain.
+
+
+### Running a service
+
+If an operator has opted into running a specific service, it will listen for the onchain events specified in the service contract and then run the corresponding component. Service contracts can pass data from the onchain event triggers to be used as an input when running a component. For instance, in the Squaring AVS example, a number is passed in an onchain message to the service contract. Operators that are registered to run the squaring service listen for this onchain message and use the number specified in the message as the input for the squaring component. The component is run, and the squared number is verified and returned onchain.
+
+
+### Signing and aggregation
+
+When a service is run, each operator registered to the service will run the service component on their machine and generate result. These results are signed by the operator before being submitted.
+
+For services that submit results on Ethereum, an offchain aggregator can be used to conserve gas fees. Instead of each individual operator submitting results of a service directly onchain (which would be costly), operators sign the results and submit them offchain to an aggregator, which aggregates the results and submits a result to be posted to the chain in a single transaction. Results are signed using an operator's individual private key to produce an ECDSA signature, which is used to prove that the result is associated with an operator's specific private and public key pair. The aggregator accepts the result submissions from operators, verifies their validity, and compares the responses. If there is a consensus among operators on a single result, it is submitted onchain as a single transaction. This method ensures that results are verifiably accurate while saving on transaction costs. Aggregation is an optional feature that can be defined in a service.
+
+## Updating a service
+
+Because of the lightweight and portable nature of WebAssembly, WAVS operators only need to run a single docker image. WAVS provides a runtime for all registered services to run, each sandboxed from the other and from the node’s operating system due to the nature of WASI. Operators will need to opt in to running different services by registering to an AVS.
+
+Updates to service logic do not require node upgrades. Instead, developers can dynamically deploy a new service component and update their service manifest to point to the component’s new version. Instead of needing to run a new Docker image every time a service is updated, operators only need to upgrade if there is a breaking change to the WAVS node software itself.
+
+## The flow
+
+<img alt="WAVS overview" src="/flow.png" />
+
+Onchain events can trigger a service's WASI components, which are run offchain by operators in the AVS WASI runtime. Results are then verified and brought back onchain, enabling the decentralized execution of offchain services which are verifiable onchain.
+
+1. An AVS builder defines their service with a trigger, a service component, and other basic configuration.
+2. Operators listen for onchain events specified in the trigger contract.
+3. An onchain event triggers a task, and operators run the corresponding service component offchain.
+4. Operators sign the result of the task, and the signatures are sent to the aggregator contract.
+5. Signatures are aggregated, and the result is sent onchain.
+
+

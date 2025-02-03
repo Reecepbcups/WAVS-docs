@@ -1,0 +1,41 @@
+---
+title: WAVS Docs
+---
+import { HomeIcon, AppWindow, CircuitBoard, Layers, Microscope, Grid2x2, ChevronRight } from 'lucide-react';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { DocsPage } from 'fumadocs-ui/page';
+
+<img alt="WAVS" src="/wavs.png" />
+
+Welcome to the WAVS Docs!
+
+WAVS is a next-generation AVS platform, making it easy to create, manage, and operate high-performance AVSs. Use this documentation to learn how WAVS work and how to start building your AVS.
+
+## Get started
+
+<Cards>
+      <Card
+    icon={<CircuitBoard />}
+    href="/about"
+    title="About WAVS"
+    description="Learn how WAVS is revolutionizing AVSs"
+  />
+  <Card
+    icon={<Microscope />}
+    href="/how-it-works"
+    title="How WAVS works"
+    description="Discover the inner workings of WAVS"
+  />
+      <Card
+    icon={<Layers />}
+    href="/tutorial/1-weather-service"
+    title="Build a service"
+    description="Follow a tutorial to build a weather service"
+  />
+    <Card
+    icon={<ChevronRight />}
+    href="/guides/develop-wasi"
+    title="Build and test"
+    description="Build and test your service component"
+  />
+</Cards>
