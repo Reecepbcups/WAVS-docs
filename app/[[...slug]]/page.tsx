@@ -18,10 +18,11 @@ export default async function Page({
 
   let isFull = false;
 
-  const updatedToc = page.data.exports.toc.map(item => {
-    if (item.title.includes('!!steps')) {
+  const updatedToc = (page.data.exports.toc ?? []).filter(item => item && typeof item.title === 'string').map(item => {
+    const title = String(item.title); // Ensure title is always a string
+    if (title.includes('!!steps')) {
       isFull = true;
-      return { ...item, title: item.title.replace('!!steps ', '') };
+      return { ...item, title: title.replace('!!steps ', '') };
     }
     return item;
   });
