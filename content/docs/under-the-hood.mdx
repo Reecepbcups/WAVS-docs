@@ -4,6 +4,24 @@ title: Under the hood
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
+
+
+
+
+The WAVS platform allows you to create and run AVSs quickly and securely. Most web3 applications rely on centralized infrastructure and legacy systems to function, undermining the goal of decentralized applications. Instead of relying on these systems, WAVS leverages Ethereum security via Eigenlayer to enable fully customizable AVSs that can run arbitrary functions offchain and be verified onchain in a decentralized manner. Through the power of WASM, WAVS allows you to build full-stack decentralized applications.
+
+## What is an AVS?
+
+AVSs (Actively Validated Services) are computational services that run offchain and can be verified onchain. Traditional smart contracts are limited in that they are only designed to run verifiable onchain functions. However, most real-world applications rely on offchain processes to function. Because blockchains are opaque to the validity of offchain data, there needs to be a way to verify offchain processes. This is where AVSs come in.
+
+AVSs enable the execution of offchain computational processes and bring the results of these processes onchain in a verifiable way. To achieve this, AVSs use node participants called operators to run their processes. When a process is run offchain by an operator,
+
+AVSs can be any offchain process that can be run and verified, including data layers, ZK proofs, price oracles, decentralized frontends, DeFi applications, and even decentralized AI agents. By leveraging economic security from Ethereum, WAVS enables a new generation of applications and general compute that can be decentralized at every point, both off and onchain.
+
+
+
+
+
 This page discusses the technical details of how WAVS currently works.
 
 The contents of this page follow the flow of the [e2e test](https://github.com/Lay3rLabs/WAVS/blob/main/packages/wavs/tests/e2e.rs) and the diagram in the [Overall Message and Channels Flow document](https://github.com/Lay3rLabs/WAVS/blob/main/docs/architecture/channels-runtimes.md).
