@@ -1,0 +1,174 @@
+---
+title: Squaring Example(WIP)
+---
+
+import { HoverContainer } from "@/components/hover-container"
+import { Scrollycoding } from "@/components/scrollycoding"
+
+
+<HoverContainer>
+<Scrollycoding>
+
+
+## !!steps
+
+One of the most basic service component examples is the squaring service, which takes a number as an input, and returns the square of that number.
+
+Scroll down to learn how this component was built.
+
+{/* prettier-ignore */}
+```rust ! lib.rs
+#[allow(warnings)]
+mod bindings;
+use anyhow::anyhow;
+use bindings::Guest;
+use serde::{Deserialize, Serialize};
+
+struct Component;
+
+impl Guest for Component {
+    fn process_eth_trigger(input: Vec<u8>) -> std::result::Result<Vec<u8>, String> {
+        let TaskRequestData { x } = serde_json::from_slice(&input)
+            .map_err(|e| anyhow!("Could not deserialize input request from JSON: {}", e))
+            .unwrap();
+
+        let y = x * x;
+
+        println!("{}^2 = {}", x, y);
+
+        Ok(serde_json::to_vec(&TaskResponseData { y })
+            .map_err(|e| anyhow!("Could not serialize output data into JSON: {}", e))
+            .unwrap())
+    }
+}
+
+bindings::export!(Component with_types_in bindings);
+
+#[derive(Deserialize, Debug)]
+pub struct TaskRequestData {
+    pub x: u64,
+}
+
+#[derive(Serialize, Debug)]
+pub struct TaskResponseData {
+    pub y: u64,
+}
+```
+
+## !!steps The Trigger
+
+
+When a new trigger is created in the Trigger Contract, it emits an event containing a number (`{"x": 5}`) as the [`TaskRequestData`](hover:one).
+
+Operators listening for the `NewTrigger` event pass the data to the Service Component's `process_eth_trigger` function.
+
+{/* prettier-ignore */}
+```rust ! lib.rs
+#[allow(warnings)]
+mod bindings;
+use anyhow::anyhow;
+use bindings::Guest;
+use serde::{Deserialize, Serialize};
+
+struct Component;
+
+// !focus(1:5)
+impl Guest for Component {
+    fn process_eth_trigger(input: Vec<u8>) -> std::result::Result<Vec<u8>, String> {
+            // !hover one
+        let TaskRequestData { x } = serde_json::from_slice(&input)
+            .map_err(|e| anyhow!("Could not deserialize input request from JSON: {}", e))
+            .unwrap();
+
+        let y = x * x;
+
+        println!("{}^2 = {}", x, y);
+
+        Ok(serde_json::to_vec(&TaskResponseData { y })
+            .map_err(|e| anyhow!("Could not serialize output data into JSON: {}", e))
+            .unwrap())
+    }
+}
+
+bindings::export!(Component with_types_in bindings);
+
+// !focus(1:3)
+#[derive(Deserialize, Debug)]
+pub struct TaskRequestData {
+    pub x: u64,
+}
+
+#[derive(Serialize, Debug)]
+pub struct TaskResponseData {
+    pub y: u64,
+}
+```
+
+
+
+## !!steps The Service Logic
+
+In this example, the core logic of the service is a simple equation: `let y = x * x`.
+
+The Service Component logic is run offchain by operators (`5 * 5`).
+
+{/* prettier-ignore */}
+```rust ! lib.rs
+
+impl Guest for Component {
+    fn process_eth_trigger(input: Vec<u8>) -> std::result::Result<Vec<u8>, String> {
+        let TaskRequestData { x } = serde_json::from_slice(&input)
+            .map_err(|e| anyhow!("Could not deserialize input request from JSON: {}", e))
+            .unwrap();
+
+// !focus
+        let y = x * x;
+
+        println!("{}^2 = {}", x, y);
+
+        Ok(serde_json::to_vec(&TaskResponseData { y })
+            .map_err(|e| anyhow!("Could not serialize output data into JSON: {}", e))
+            .unwrap())
+    }
+}
+
+```
+
+
+## !!steps The Response
+
+
+The response is serialized (`{"y": 25}`) and returned to the operator.
+
+The operator then signs it and submits it back to the Service Manager Contract on-chain.
+
+{/* prettier-ignore */}
+```rust ! lib.rs
+
+impl Guest for Component {
+    fn process_eth_trigger(input: Vec<u8>) -> std::result::Result<Vec<u8>, String> {
+        let TaskRequestData { x } = serde_json::from_slice(&input)
+            .map_err(|e| anyhow!("Could not deserialize input request from JSON: {}", e))
+            .unwrap();
+
+        let y = x * x;
+
+        println!("{}^2 = {}", x, y);
+// !focus(1:3)
+        Ok(serde_json::to_vec(&TaskResponseData { y })
+            .map_err(|e| anyhow!("Could not serialize output data into JSON: {}", e))
+            .unwrap())
+    }
+}
+
+
+// !focus(1:4)
+#[derive(Serialize, Debug)]
+pub struct TaskResponseData {
+    pub y: u64,
+}
+```
+
+</Scrollycoding>
+
+</HoverContainer>

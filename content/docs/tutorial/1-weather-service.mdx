@@ -1,0 +1,34 @@
+---
+title: 1. Overview
+---
+import { HomeIcon, AppWindow, CircuitBoard, Layers, Microscope, Grid2x2, CloudSun, ChevronRight } from 'lucide-react';
+import { Callout } from 'fumadocs-ui/components/callout';
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+<img alt="Start-building" src="/start-building.png" />
+
+This guide will walk you through the steps of creating, testing, and running a service using WAVS.
+
+For this tutorial, you'll be building a simple weather service that takes a city and state as an onchain input, fetches weather data offchain, and submits a response onchain of the weather data of the specified location.
+
+1. An onchain trigger with a location (`Winston-salem,NC` for example) is emitted.
+
+2. Operators running the weather service listen for the event, and fetch the weather data from the specified location. in the [Open Weather API](https://openweathermap.org/api).
+
+3. Operators receive the result from the weather API and return it onchain as a signed payload.
+
+
+<Callout title="Get your API key" type="info">
+Before starting this tutorial, you'll need an Open Weather API key.
+
+Visit https://home.openweathermap.org/users/sign_up to sign up to access a free weather API key. You'll need an API key to complete this guide.
+
+**API key activation may take 2 hours to complete after registering**.
+</Callout>
+
+    <Card
+    icon={<ChevronRight />}
+    href="/tutorial/2-setup"
+    title="Get started"
+    description="Click here to set up your environment and start building your service."
+  />
