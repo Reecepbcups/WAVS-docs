@@ -1,4 +1,4 @@
 {
-    "title": "Build a service (Not updated)",
-    "pages": [ "1-weather-service", "2-setup", "3-project", "4-component", "5-build", "6-contract", "7-run-service" ]
+    "title": "Oracle service tutorial",
+    "pages": [ "1-overview", "2-setup", "3-project", "4-component", "5-build", "6-start", "7-run-service" ]
 }

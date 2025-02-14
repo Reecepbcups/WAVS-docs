@@ -1,30 +1,47 @@
 ---
-title: 5. Build and test
+title: 5. Build and test components
 ---
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 
-## Build your component
+## Build WASI component
 
-Use the following command to build your component:
+Run the following command in your terminal to build your component.
 
 ```bash
-just wasi-build eth-trigger-reece-weather
+make wasi-build
 ```
 
-## Test your component
+This command will build any components present in the `/components` directory, as well as auto-generate bindings and compile the components to WASM.
 
-The following commands will allow you to test your component by running it in a mock environment.
-
-1. Export your [Open Weather API key](https://home.openweathermap.org/api_keys). Make sure to add your OpenWeather API key to the command below.
+<Callout title="Build command" type="info">
+You can also use the command below to build your solidity contracts and components in one command:
 
 ```bash
-export WAVS_ENGINE_ENV_OPEN_WEATHER_API_KEY="<your-key-here>"
+make build
 ```
 
-2. The following command will simulate running just the component itself in the runtime with the input `Nashville,Tn`.
+</Callout>
+
+## Execute WASI component directly
+
+You can use the following command to execute the component using Cast. This command is handy for testing components without having to deploy WAVS.
 
 ```bash
-just cli-exec ./components/eth_trigger_reece_weather.wasm Nashville,TN
+make wasi-exec
+```
+
+Upon successful execution, you should receive a result similar to the following:
+
+```bash
+resp_data: Ok(PriceFeedData { symbol: "BTC", timestamp: "2025-02-14T01:23:03.963Z", price: 96761.74120116462 })
+ INFO Gas used:
+1477653
+
+Result (hex encoded):
+7b2273796d626f6c223a22425443222c2274696d657374616d70223a22323032352d30322d31345430313a32333a30332e3936335a222c227072696365223a39363736312e37343132303131363436327d
+
+Result (utf8):
+{"symbol":"BTC","timestamp":"2025-02-14T01:23:03.963Z","price":96761.74120116462}
 ```

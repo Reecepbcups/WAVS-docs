@@ -4,6 +4,8 @@ title: How it works
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
+<img alt="WAVS" src="/banners/how.png" />
+
 WAVS is a decentralized execution framework for AVSs (Actively Validated Services), enabling the results of off-chain computation to be brought verifiably on-chain. It provides a runtime for executing WASI-based service components, allowing developers to define event-driven off-chain workflows while inheriting Ethereum’s security via EigenLayer restaking.
 
 When an on-chain contract emits an event, WAVS operators listen, execute the corresponding service component off-chain, and sign the result. Results can then be submitted on-chain or passed to other services. This allows AVSs to process complex computations off-chain at near-native speed, while maintaining on-chain verifiability.
@@ -37,7 +39,7 @@ The WAVS platform consists of several different parts which work together to for
 
 ## Triggers
 
-A trigger is any on-chain event that activates a WAVS service. Rather than requiring a specific contract interface, WAVS allows AVS builders to designate any event from any smart contract as a trigger. In the near future, other triggers will also be enabled, such as cron or offchain triggers.
+A trigger is any on-chain event that activates a WAVS service. Rather than requiring a specific contract interface, WAVS allows AVS builders to designate any event from any smart contract as a trigger. In the near future, other triggers will also be enabled, such as cron or off-chain triggers.
 
 AVS builders can specify the exact events that operators should listen for, defining:
 - The contract address emitting the event.
@@ -67,7 +69,7 @@ The Service Manager acts as the intermediary between EigenLayer and WAVS, ensuri
 A Service Handler is responsible for receiving and processing validated data from the Service Manager.  It can be any contract, as long as it provides the necessary interface for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
 
 ## WAVS Runtime
-The WAVS (WASI-AVS) runtime serves as the offchain execution environment for all services running on the WAVS platform. Powered by operators running the WAVS node software, it provides a structured framework for deploying and managing service components that run within a WASI (WebAssembly System Interface) environment.
+The WAVS (WASI-AVS) runtime serves as the off-chain execution environment for all services running on the WAVS platform. Powered by operators running the WAVS node software, it provides a structured framework for deploying and managing service components that run within a WASI (WebAssembly System Interface) environment.
 You can think of WASI as a lightweight OS-like interface, offering a standard set of APIs that allow service components to perform system-level operations such as file handling and environment interactions. WAVS enables service components to execute securely within this WASI-powered sandbox, ensuring isolation from both the host system and other components.
 
 ### WASM and WASI
