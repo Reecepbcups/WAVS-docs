@@ -24,13 +24,15 @@ make build
 
 </Callout>
 
-## Execute WASI component directly
+## Testing and debugging
 
 You can use the following command to execute the component using Cast. This command is handy for testing components without having to deploy WAVS.
 
 ```bash
 make wasi-exec
 ```
+
+This command runs your component locally in a simulated environment and lets you easily view `print` statements for debugging. Running this command in the oracle example will print the information from the oracle [component code](./4-component#logging).
 
 Upon successful execution, you should receive a result similar to the following:
 
@@ -45,3 +47,16 @@ Result (hex encoded):
 Result (utf8):
 {"symbol":"BTC","timestamp":"2025-02-14T01:23:03.963Z","price":96761.74120116462}
 ```
+
+Visit the [component walkthrough](./4-component#logging) for more information on logging during testing and production.
+
+## Custom triggers
+
+When developing a custom trigger, you will need to update the template code in a few place:
+
+1. The trigger contract itself in `src/WavsTrigger.sol`, which defines how triggers are created and emitted on-chain.
+2. The `wasi-exec` command in the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/Makefile#L37-L40), which passes input data when testing WAVS components via `-input cast format-bytes32-string $(COIN_MARKET_CAP_ID)`. This simulates an Ethereum event during local execution.
+3. The `decode_trigger_event` function in `/components/eth-price-oracle/src/trigger.rs` which processes the trigger data and extracts relevant fields like `trigger_id` and `data`.
+5. The `run` function in `/components/eth-price-oracle/src/lib.rs`, which calls decode_trigger_event, processes the extracted trigger data, and determines how to handle it.
+4. The trigger script in `/script/Trigger.s.sol` which calls the `addTrigger` function with the `coinMarketCapID`, used in this template for the oracle example.
+
