@@ -32,13 +32,14 @@ You can use the following command to execute the component using Cast. This comm
 make wasi-exec
 ```
 
-This command runs your component locally in a simulated environment and lets you easily view `print` statements for debugging. Running this command in the oracle example will print the information from the oracle [component code](./4-component#logging).
+This command runs your component locally in a simulated environment and lets you easily view `print` statements for debugging. Running this command in the oracle example will print the information from the oracle [component code](./4-component#logging). Visit the [component walkthrough](./4-component#logging) for more information on logging during testing and production.
+
 
 Upon successful execution, you should receive a result similar to the following:
 
 ```bash
 resp_data: Ok(PriceFeedData { symbol: "BTC", timestamp: "2025-02-14T01:23:03.963Z", price: 96761.74120116462 })
- INFO Gas used:
+ INFO Fuel used:
 1477653
 
 Result (hex encoded):
@@ -48,7 +49,14 @@ Result (utf8):
 {"symbol":"BTC","timestamp":"2025-02-14T01:23:03.963Z","price":96761.74120116462}
 ```
 
-Visit the [component walkthrough](./4-component#logging) for more information on logging during testing and production.
+<Callout title="Fuel" type="info">
+
+In the output above, the `INFO Fuel used` value represents the computational power consumed during execution. Similar to how on-chain transactions have a gas limit to cap transaction costs, WAVS enforces a fuel limit to control offchain computational workload and protect against DoS attacks. 
+
+The maximum fuel allocation can be adjusted in the `Makefile` to accommodate different processing needs.
+
+</Callout>
+
 
 ## Custom triggers
 

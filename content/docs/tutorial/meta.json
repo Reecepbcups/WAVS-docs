@@ -1,4 +1,4 @@
 {
     "title": "Build a service",
-    "pages": [ "1-overview", "2-setup", "3-project", "4-component", "5-build", "6-start", "7-run-service" ]
+    "pages": [ "1-overview", "2-setup", "3-project", "4-component", "5-build", "6-start", "7-run-service", "8-prediction" ]
 }
