@@ -23,14 +23,26 @@ Run the following command to install [Rust](https://www.rust-lang.org/tools/inst
 curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh
 ```
 
+<Callout title="Fresh Install" type="info">
+
+If you just installed Rust for the first time, you will need to run the following commands:
+
+```bash
+# Install required target and toolchain
+rustup toolchain install stable
+rustup target add wasm32-wasip2
+```
+</Callout>
+
+
 <Callout title="Upgrade Rust" type="info">
 
 If you already have a previous version of Rust installed, you will need to run the following commands to upgrade it to the latest stable version:
 
 ```bash
-# Remove old targets
-rustup target remove wasm32-wasi
-rustup target remove wasm32-wasip1
+# Remove old targets if present
+rustup target remove wasm32-wasi || true
+rustup target remove wasm32-wasip1 || true
 
 # Update and add required target
 rustup update stable
