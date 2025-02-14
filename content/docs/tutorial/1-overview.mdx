@@ -1,5 +1,5 @@
 ---
-title: 1. Overview
+title: 1. Oracle service overview
 ---
 import { HomeIcon, AppWindow, CircuitBoard, Layers, Microscope, Grid2x2, CloudSun, ChevronRight } from 'lucide-react';
 import { Callout } from 'fumadocs-ui/components/callout';
@@ -9,9 +9,9 @@ import { link } from "@/components/link.tsx"
 
 <img alt="Start-building" src="/start-building.png" />
 
-In this guide, you will build a simple oracle service that fetches Bitcoin price data from [coinmarketcap.com](coinmarketcap.com).
+In this guide, you will build a simple oracle service that fetches Bitcoin price data from [coinmarketcap.com](coinmarketcap.com). This example is built using the [WAVS Foundry Template](https://github.com/Lay3rLabs/wavs-foundry-template), which contains the tools you need to build your own custom service.
 
-This oracle service has three basic parts:
+The price oracle service example has three basic parts:
 
 1. [A trigger](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/src/WavsTrigger.sol): A trigger can be any on-chain event emitted from a contract. This event **triggers** a service to run. In the WAVS Foundry Template, there is a simple trigger contract that stores trigger requests, assigns them unique IDs, and emits an event when a new trigger is added. In this example, the trigger event will pass data pertaining to the ID of an asset for the coinmarketcap price feed.
 
@@ -19,7 +19,7 @@ This oracle service has three basic parts:
 
 3. [A submission contract](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/src/WavsSubmit.sol): Also known as the “service handler,” this contract contains the on-chain submission logic for the service. It validates and stores the processed data returned by the WAVS component. When an operator submits a response, the contract verifies the data’s integrity by checking the operator’s signature and then associates it with the original trigger ID, bringing the queried price on-chain.
 
-These three simple parts come together to create a basic oracle service using WAVS. To learn more about services and how they work, visit the [How it works page](../how-it-works).
+These three parts come together to create a basic oracle service using WAVS. To learn more about services and how they work, visit the [How it works page](../how-it-works).
 
 
     <Card
