@@ -9,15 +9,56 @@ import { link } from "@/components/link.tsx"
 
 The core logic of the price oracle in this example is located in the [`/eth-price-oracle/src/lib.rs` file](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/components/eth-price-oracle/src/lib.rs). Scroll down to follow a walkthrough of the code for the oracle component.
 
-If you already understand how the oracle component works, [click here](./5-build) to move on to the next section.
-
 
 <HoverContainer>
 <Scrollycoding>
 
-## !!steps Component definitions and imports
+## !!steps trigger.rs
 
-The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
+First, it's important to understand the [`trigger.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/components/eth-price-oracle/src/trigger.rs) file, which is responsible for decoding incoming trigger data and preparing it for processing within the WAVS component. The function `decode_trigger_event` determines the type of trigger and extracts relevant information like `triggerId` and `data`. In this example, it expects Ethereum logs and decodes them.
+
+This code can be updated if a different trigger type (such as a Cosmos or other event) is used. The `encode_trigger_output` function ensures that processed data is formatted correctly before being sent back. Make sure to also [update the relevant code](./5-build#custom-triggers) when creating custom triggers.
+
+```rust ! trigger.rs
+use crate::bindings::wavs::worker::layer_types::{TriggerData, TriggerDataEthContractEvent};
+use alloy_sol_types::SolValue;
+use anyhow::Result;
+use wavs_wasi_chain::decode_event_log_data;
+
+pub enum Destination {
+    Ethereum,
+    CliOutput,
+}
+
+pub fn decode_trigger_event(trigger_data: TriggerData) -> Result<(u64, Vec<u8>, Destination)> {
+    match trigger_data {
+        TriggerData::EthContractEvent(TriggerDataEthContractEvent { log, .. }) => {
+            let event: solidity::NewTrigger = decode_event_log_data!(log)?;
+            let trigger_info = solidity::TriggerInfo::abi_decode(&event._0, false)?;
+            Ok((trigger_info.triggerId, trigger_info.data.to_vec(), Destination::Ethereum))
+        }
+        TriggerData::Raw(data) => Ok((0, data.clone(), Destination::CliOutput)),
+        _ => Err(anyhow::anyhow!("Unsupported trigger data type")),
+    }
+}
+
+pub fn encode_trigger_output(trigger_id: u64, output: impl AsRef<[u8]>) -> Vec<u8> {
+    solidity::DataWithId { triggerId: trigger_id, data: output.as_ref().to_vec().into() }
+        .abi_encode()
+}
+
+mod solidity {
+    use alloy_sol_macro::sol;
+    pub use ITypes::*;
+
+    sol!("../../src/interfaces/ITypes.sol");
+}
+
+```
+
+## !!steps Oracle component definitions
+
+The [`lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/components/eth-price-oracle/src/lib.rs) file contains the main component logic for the oracle. The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
 
 ```rust ! lib.rs
 // !focus(1:13)
@@ -171,8 +212,7 @@ pub struct Status {
 
 ## !!steps Trigger data
 
-The next section decodes the event sent from the trigger contract and extracts the `trigger_id` and data. The data from the trigger is processed and converted into the asset ID which will be used in the query.
-
+The next section decodes the event sent from the trigger and extracts the `trigger_id` and data. The `run` function in `lib.rs` calls `decode_trigger_event` from `trigger.rs` to parse the trigger input, retrieve the trigger ID, and process the data by converting it into an asset ID, which will be used in the query.
 
 ```rust ! lib.rs
 mod trigger;
@@ -225,8 +265,6 @@ impl Guest for Component {
     }
 }
 ```
-
-
 
 ## !!steps Fetching price data
 
@@ -343,7 +381,50 @@ The price data is ready to be submitted by operators via the submission contract
 }
 ```
 
+## !!steps Logging for development
+
+<p id="logging"> </p>
+
+When developing your own WASI component, it's helpful to use logging methods in your code. Components write all their standard output and errors (`stdout` or `stderr`) to the host machine.
+
+In this example, `println!()` is used in `fn run()` to debug `input id` and `resp_data` while processing price feed requests asynchronously. This will write to `stdout` and is visible in local development when you run the [`wasi-exec` command](./5-build#execute-wasi-component-directly) in the next section of this guide.
+
+For production, you can use a `host::log()` function log which takes a LogLevel and writes its output via the tracing mechanism. Along with the string that the developer provides, it attaches additional context such as the `ServiceID`, `WorkflowID` and component `Digest`.
+
+```rust ! lib.rs
+impl Guest for Component {
+    fn run(action: TriggerAction) -> std::result::Result<Vec<u8>, String> {
+        let (trigger_id, req, dest) =
+            decode_trigger_event(action.data).map_err(|e| e.to_string())?;
+
+        // Convert bytes to string and parse first char as u64
+        let input = std::str::from_utf8(&req).map_err(|e| e.to_string())?;
+        // !focus(1)
+        println!("input id: {}", input);
+
+        let id = input.chars().next().ok_or("Empty input")?;
+        let id = id.to_digit(16).ok_or("Invalid hex digit")? as u64;
+
+        let res = block_on(async move {
+            let resp_data = get_price_feed(id).await;
+            // !focus(1)
+            println!("resp_data: {:?}", resp_data);
+
+            match resp_data {
+                Ok(resp) => {
+                    let output: Vec<u8> = serde_json::to_vec(&resp).unwrap();
+                    Ok(output)
+                }
+                Err(e) => Err(e),
+            }
+        });
+```
+
+
+
 ## !!steps Next step
+
+
 
 Continue to the [next section](./5-build) to learn how to build and test your component.
 
