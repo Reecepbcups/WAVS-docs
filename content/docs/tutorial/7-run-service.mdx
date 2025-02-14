@@ -6,7 +6,9 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 With the chain and WAVS running, you can deploy and run your service.
 
-1. Open a new terminal and run the following command from the root of your project to upload your Service's Trigger and Submission contracts:
+## Deploy solidity contracts
+
+Open a new terminal and run the following command from the root of your project to upload your Service's Trigger and Submission contracts:
 
 ```bash
 make deploy-contracts
@@ -31,12 +33,12 @@ make get-service-handler-from-deploy
 </Callout>
 
 
-## Deploy Service
+## Deploy your service to WAVS
 
-Next, deploy your service with the following command:
+The following command will deploy your WASI component and service information to WAVS to be run by operators when triggered:
 
 ```bash
-TRIGGER_EVENT="NewTrigger(bytes)" make deploy-service
+make deploy-service
 ```
 
 This command specifies the event emitted from your trigger contract as the on-chain event that will trigger your service. In the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L95-L103), you can also see that it specifies the submission contract as the `submit-address`, as well as the filename of your component.
@@ -44,6 +46,12 @@ This command specifies the event emitted from your trigger contract as the on-ch
 <Callout title="Customize variables" type="info">
 
 Open the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L9-L22) to view the different variables that you can customize, including the trigger event, the component filename, and the service config.
+
+You can also modify variables by specifying them before running the `make` command:
+
+```bash
+TRIGGER_EVENT="NewTrigger(bytes)" make deploy-service
+```
 
 </Callout>
 
