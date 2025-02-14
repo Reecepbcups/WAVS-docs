@@ -37,7 +37,7 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
           collapseTrigger,
           collapseContent,
           focus,
-          lineNumbers,
+          // lineNumbers,
           link,
           tokenTransitions,
           wordWrap

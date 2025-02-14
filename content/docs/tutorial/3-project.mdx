@@ -1,104 +1,63 @@
 ---
-title: 3. Project setup
+title: 3. Create your project
 ---
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
-## Clone WAVS
-
-1. Clone the [WAVS repo](https://github.com/Lay3rLabs/WAVS) and checkout the `reece/january-building-your-wavs` branch. You'll be building your project from this branch.
+1. After setting up your environment, open a terminal and run the following command to create your WAVS Foundry Template project. In this example, your project will be called `my-wavs`.
 
 ```bash
-git clone git@github.com:Lay3rLabs/WAVS.git --branch reece/january-building-your-wavs
+forge init --template Lay3rLabs/wavs-foundry-template my-wavs
 ```
 
-2. Enter the WAVS directory.
+2. Then, enter your project:
+
+```
+cd my-wavs
+```
+
+3. Run the following command to open your project in VS code:
 
 ```bash
-cd WAVS
+code .
 ```
 
-## Modify `max_wasm_fuel`
+## Explore the template
 
-Open `packages/wavs/wavs.toml` and modify the `max_wasm_fuel` to `100_000_000`
+This template repo contains all the files you'll need to build, run, and test WAVS services locally.
 
-```toml
-max_wasm_fuel = 100_000_000
-```
+The template already contains the necessary files for the oracle example to run. For example, the trigger (`WavsTrigger.sol`) and submission (`WavsSubmit.sol`) contracts can be found in the `/my-wavs/src/` folder.
 
-## Environment setup
+In `/eth-price-oracle/src/lib.rs` you'll find the oracle service component.
 
-Use the following command to copy the `/env` files from the examples.
+This template uses a `Makefile` and environment variables to help with your developer experience. If you are ever curious about one of the `Make` commands in the following sections, you can always look at the `Makefile` to learn more.
+
+<Callout title="Info" type="info">
+
+You can run the following command from the root of the repo to see all of the commands and environment variable overrides available:
 
 ```bash
-cp packages/cli/.env.example packages/cli/.env
-cp packages/wavs/.env.example packages/wavs/.env
+make help
 ```
 
-## Set up your project
+</Callout>
 
-1. Set up a new project by copying the `examples/eth-trigger-echo` example.
+The next sections will show you how to deploy your contracts and components, set up WAVS, and run the oracle example.
+
+
+## Build and test your contracts
+
+Run the following commands from the root of the your project to install necessary dependencies, build the template contracts, and run tests using Forge.
 
 ```bash
-cp -r examples/eth-trigger-echo examples/eth-trigger-reece-weather
+# Install dependencies
+make setup
+
+# Build the contracts
+forge build
+
+# Run the solidity tests.
+forge test
 ```
 
-2. Update the paths in `cargo.toml`.
-
-```bash
-sed -i -e 's/eth-trigger-echo/eth-trigger-reece-weather/g' examples/eth-trigger-reece-weather/Cargo.toml
-```
-
-3. Run the following command in your terminal to open `examples/Cargo.toml` in VS Code.
-
-```
-code examples/Cargo.toml
-```
-
-4. Add your project to the workspace by pasting `"eth-trigger-reece-weather",` in the `[workspace] members` array.
-
-```toml
-[workspace]
-members = [
-  "btc-avg",
-  "composition/http-allow-list/http-allowed-coingecko",
-  "square",
-  "permissions",
-  "ai-bouncer",
-  "eth-event-echo",
-  "eth-trigger-echo",
-  "eth-trigger-square",
-  "eth-cosmos-query",
-  "eth-trigger-reece-weather", # <- Add this one
-]
-```
-
-## Update your project's Cargo.toml
-
-The following steps all take place in the `examples/eth-trigger-reece-weather/Cargo.toml` file.
-
-1. Open `examples/eth-trigger-reece-weather/Cargo.toml` and update `name=` under `[package]` to `"eth-trigger-reece-weather"`
-
-```toml
-[package]
-name = "eth-trigger-reece-weather" # Update this line
-
-```
-
-2. Under `[dependencies]`, add the following:
-
-```toml
-[dependencies]
-wit-bindgen-rt = { workspace = true, features = ["bitflags"] }
-layer-wasi = { workspace = true } # Needed to interact with the WAVS runtime
-serde = { workspace = true, features = ["derive"] } # for JSON conversion
-serde_json = {workspace = true} # for JSON conversion
-reqwest = {version = "0.12.12"} # Makes requests for you
-```
-
-3. Update the package name:
-
-```toml
-[package.metadata.component]
-package = "component:eth-trigger-reece-weather" # Update this line
-```
+The last command runs a basic unit test which verifies that the `SimpleTrigger` contract in `/WavsTrigger.sol` correctly stores and retrieves trigger data.

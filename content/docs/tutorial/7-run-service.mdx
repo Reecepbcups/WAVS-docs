@@ -4,91 +4,75 @@ title: 7. Run your service
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
+With the chain and WAVS running, you can deploy and run your service.
 
-
-<Callout title="Clear WAVS data" type="error">
-Before proceeding, if you previously used wavs, clear old data by running the following command.
+1. Open a new terminal and run the following command from the root of your project to upload your Service's Trigger and Submission contracts:
 
 ```bash
-rm -rf ~/wavs/
+make deploy-contracts
+```
+
+This command uses the script located in [`script/Deploy.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/script/Trigger.s.sol) to deploy your contracts.
+
+<Callout title="Deployed addresses" type="info">
+
+View your deployed trigger address:
+
+```bash
+make get-trigger-from-deploy
+```
+
+View your deployed submission address:
+
+```bash
+make get-service-handler-from-deploy
 ```
 
 </Callout>
 
-<Callout title="Weather API Key" type="warn">
-This terminal session must have access to your [Weather API Key](https://home.openweathermap.org/users/sign_up). Before proceeding, make sure you have exported your API key.
+
+## Deploy Service
+
+Next, deploy your service with the following command:
 
 ```bash
-export WAVS_ENGINE_ENV_OPEN_WEATHER_API_KEY="<Your-API-Key>"
-```
-</Callout>
-
-## Start WAVS
-
-1. The following command launches Anvil (your local testchain), the WAVS runtime, and the WAVS aggregator, which aggregates multiple operator responses into a single transaction to conserve gas.
-
-```bash
-just start-all
+TRIGGER_EVENT="NewTrigger(bytes)" make deploy-service
 ```
 
-2. Open a new terminal and run the following command to deploy EigenLayer Core contracts:
+This command specifies the event emitted from your trigger contract as the onchain event that will trigger your service. In the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L95-L103), you can also see that it specifies the submission contract as the `submit-address`, as well as the filename of your component.
 
-```bash
-just cli-deploy-core
-```
+<Callout title="Customize variables" type="info">
 
-3. Copy the EigenLayer Core contract addresses directly from the deployment with the following command. This will save your contract addresses to `WAVS/cli/deployments.json`.
+Open the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L9-L22) to view the different variables that you can customize, including the trigger event, the component filename, and the service config.
 
-```bash
-CONTRACTS=`cat ~/wavs/cli/deployments.json | jq -r .eigen_core.local`
-export FOUNDRY_ANVIL_PRIVATE_KEY="0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
-export CLI_EIGEN_CORE_DELEGATION_MANAGER=`echo $CONTRACTS | jq -r '.delegation_manager'`
-export CLI_EIGEN_CORE_REWARDS_COORDINATOR=`echo $CONTRACTS | jq -r '.rewards_coordinator'`
-export CLI_EIGEN_CORE_AVS_DIRECTORY=`echo $CONTRACTS | jq -r '.avs_directory'`
-```
-
-5. Deploy the ECDSA Stake Registry contract for message signing verification and your custom Service Manager contract for task submission to your local Anvil chain.
-
-```bash
-forge script ./contracts/script/ReeceWeatherServiceManager.s.sol --rpc-url http://127.0.0.1:8545 --broadcast
-```
-
-6. Grab the contract addresses from `latest`.
-
-```bash
-# ECDSA_STAKE_REGISTRY_ADDRESS=`jq -r .transactions[0].contractAddress < broadcast/LayerServiceManager.s.sol/31337/run-latest.json`
-SERVICE_MANAGER_ADDRESS=`jq -r '.transactions[1].contractAddress' < broadcast/ReeceWeatherServiceManager.s.sol/31337/run-latest.json`
-```
-
-<Callout title="Note" type="info">
-The EDCSA contract is not necessary for this tutorial, so it is commented out, but you may need it when creating your own service later on.
-</Callout>
-
-7. Deploy your service, including your service component and your service manager contract.
-
-```bash
-just cli-deploy-service ./components/eth_trigger_reece_weather.wasm ${SERVICE_MANAGER_ADDRESS}
-```
-
-8. In your terminal, you'll see a `service_id` for your service. Insert your `service_id` in the command below to add a task for your service. In this example, `"Nashville,TN"` is the input for the service.
-
-<Callout title="Format" type="info">
-When building your own service, you can use the following format for a JSON input: `{\"x\":2}`
-
-You can also use hex encode: `{"x":2}` -> `7b2278223a327d`
 </Callout>
 
 
+## Trigger the Service
+
+Next, use your deployed trigger contract to trigger the oracle to be run. In the following command, you'll specify the `COIN_MARKET_CAP_ID` as `1`, which corresponds to the ID of Bitcoin.
+
+Running this command will execute `/script/Trigger.s.sol` and pass the ID to the trigger contract, starting the following chain of events:
+
+1. The trigger contract will emit an event with the specified ID as its data.
+2. Operators listening for the event will receive the data and run it in the oracle component offchain.
+3. The oracle component will use the ID to query the price of Bitcoin from the CoinMarketCap API.
+4. The Returned data will be signed by operators and passed to the submission contract which will verify the operator's signature and submit the price of Bitcoin onchain 🎉
+
+
 ```bash
-just cli-add-task <your-service_id-here> "Nashville,TN"
+COIN_MARKET_CAP_ID=1 make trigger-service
 ```
-Your task will be submitted with an incremental triggerId.
 
-If successful, the service will be run, and the response data will be saved to the chain, including the operator signature and response bytes.
+## Show the result
 
-9. Finally, you can query the contract by the TriggerId of your task to ensure the response data is stored.
+Run the following to view the result of your service in your terminal:
 
 ```bash
-DATA_RESP=`cast call $SERVICE_MANAGER_ADDRESS "signedDataByTriggerId(uint64)(bytes)" 1`; echo $DATA_RESP
-cast --to-ascii $DATA_RESP
+# Get the latest TriggerId and show the result via `script/ShowResult.s.sol`
+make show-result
 ```
+
+Congratulations, you've just made a simple Bitcoin price oracle service using WAVS!
+
+
