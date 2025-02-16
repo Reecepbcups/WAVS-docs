@@ -21,11 +21,11 @@ Before diving into each part of a WAVS service individually, it's important to u
 
 In this example, on-chain events can trigger service components, which are run off-chain by operators in the WASI AVS runtime. Results are then brought back on-chain, enabling the decentralized execution of off-chain services which are verifiable on-chain.
 
-1. An AVS builder defines their service with a trigger, a service component, and submission logic.
+1. An AVS builder defines their service with a [trigger](#triggers), a [service component](#service-components), and [submission](#submission) logic.
 2. Operators listen for on-chain events specified in the trigger contract.
 3. An on-chain event triggers a task, and operators run the corresponding service component off-chain.
-4. Operators sign the result of the task, and the signatures are sent to the aggregator.
-5. Results are aggregated and submitted on-chain.
+4. Operators sign the result of the task, and the signatures are sent to the aggregator (optional).
+5. Results are aggregated and submitted on-chain according to the [submission logic](#submission).
 
 ## WAVS parts
 
