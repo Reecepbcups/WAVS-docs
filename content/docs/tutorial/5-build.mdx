@@ -68,3 +68,7 @@ When developing a custom trigger, you will need to update the template code in a
 5. The `run` function in [`/components/eth-price-oracle/src/lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/7b8642bad3b4475152f8f00330b5cb2f23b42489/components/eth-price-oracle/src/lib.rs#L16), which calls decode_trigger_event, processes the extracted trigger data, and determines how to handle it.
 4. The trigger script in [`/script/Trigger.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/7b8642bad3b4475152f8f00330b5cb2f23b42489/script/Trigger.s.sol#L19) which calls the `addTrigger` function with the `coinMarketCapID`, used in this template for the oracle example.
 
+##  Contract interfaces
+
+You can view the code for the Solidity interfaces on the WAVS NPM package site: https://www.npmjs.com/package/@wavs/solidity?activeTab=code
+
