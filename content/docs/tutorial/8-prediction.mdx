@@ -21,18 +21,17 @@ A prediction market is a marketplace that gathers insights about the future by r
 
 These contracts handle the creation of markets and conditional tokens.
 
-`conditional-tokens-contracts` (https://github.com/Lay3rLabs/conditional-tokens-contracts) - these contracts are forked from Gnosis and updated to a recent Solidity version, and they are the core protocol that creates a conditional share in a future outcome.
+[`conditional-tokens-contracts`](https://github.com/Lay3rLabs/conditional-tokens-contracts) - these contracts are forked from Gnosis and updated to a recent Solidity version, and they are the core protocol that creates a conditional share in a future outcome.
 
-`conditional-tokens-market-makers` (https://github.com/Lay3rLabs/conditional-tokens-market-makers) - these contracts are forked from Gnosis and updated to a recent Solidity version, and they are the market makers that create a market based on the conditional shares above.
+[`conditional-tokens-market-makers`](https://github.com/Lay3rLabs/conditional-tokens-market-makers) - these contracts are forked from Gnosis and updated to a recent Solidity version, and they are the market makers that create a market based on the conditional shares above.
 
-`PredictionMarketFactory.sol` - this contract sets up all the contracts required for a functioning prediction market using the forked contracts above, and it has the power to resolve the market once the outcome is determined by the oracle AVS.
+[`PredictionMarketFactory.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketFactory.sol) - this contract sets up all the contracts required for a functioning prediction market using the forked contracts above, and it has the power to resolve the market once the outcome is determined by the oracle AVS.
 
 ### Extending the trigger contract
 
-In this demo, the oracle that resolves the market is triggered by the `PredictionMarketOracleController.sol` contract.
+In this demo, the oracle that resolves the market is triggered by the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketOracleController.sol) contract.
 
-
-This contract contains modifications to the `WavsTrigger.sol` contract from the WAVS Foundry Template repo. Similar to the simple trigger contract, it passes data to the oracle AVS via the `NewTrigger` event.
+This contract contains modifications to the `WavsTrigger.sol` contract from the [WAVS Foundry Template repo](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/src/WavsTrigger.sol). Similar to the simple trigger contract, it passes data to the oracle AVS via the `NewTrigger` event.
 
 ```rust
     struct TriggerInputData {
@@ -63,7 +62,7 @@ function addTrigger(
         require(msg.value == 0.1 ether, "Payment must be exactly 0.1 ETH");
 ```
 
-Take a look at the [`PredictionMarketOracleController.sol` file]https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketOracleController.sol to get an idea of how the contract is structured.
+Take a look at the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketOracleController.sol) file to get an idea of how the contract is structured.
 
 This contract is responsible for interacting with the oracle service, triggering WAVS to run the oracle, waiting for the oracle’s response, and telling the market factory to resolve the market.
 
