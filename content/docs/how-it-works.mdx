@@ -60,7 +60,7 @@ Service components are also designed for composability: an AVS can chain multipl
 
 WAVS services rely on on-chain contracts for the validation and on-chain submission of the results of off-chain computations.
 
-AVS builders can specify a `Service Handler` as their submission contract. After the execution of a service component in the WAVS runtime, the results can be passed to this contract, which contains validation and submission logic for the service. A `Service Handler` can be any contract that provides the necessary interface for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
+AVS builders can specify a `Service Handler` as their submission contract. After the execution of a service component in the WAVS runtime, the results can be passed to this contract, which contains validation and submission logic for the service. A `Service Handler` can be any contract that provides the [necessary interface](https://www.npmjs.com/package/@wavs/solidity?activeTab=code) for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
 
 A `Service Handler` can validate results by calling the `Service Manager` contract. The `Service Manager` acts as the intermediary between EigenLayer and WAVS, validating data and operator signatures and enforcing EigenLayer security policies.
 
