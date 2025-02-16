@@ -63,7 +63,7 @@ function addTrigger(
         require(msg.value == 0.1 ether, "Payment must be exactly 0.1 ETH");
 ```
 
-Take a look at the full code to get an idea of how the contract is structured: https://github.com/Lay3rLabs/wavs-demos/blob/main/src/PredictionMarketOracleController.sol
+Take a look at the [`PredictionMarketOracleController.sol` file]https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketOracleController.sol to get an idea of how the contract is structured.
 
 This contract is responsible for interacting with the oracle service, triggering WAVS to run the oracle, waiting for the oracle’s response, and telling the market factory to resolve the market.
 
@@ -71,10 +71,10 @@ This contract is responsible for interacting with the oracle service, triggering
 
 Similar to the oracle you created in the tutorial, the prediction market uses a simple oracle service to resolve a market by bringing  off-chain data  on-chain.
 
-This WASI component runs in WAVS and fetches the prediction market’s resolution when necessary. A wallet executes the `PredictionMarketOracleController.sol` contract’s `addTrigger` function, which triggers WAVS to run this oracle by emitting an event. Then, WAVS commits the response from this oracle component with a signature back to the contract on-chain, and the market is resolved.
+This WASI component runs in WAVS and fetches the prediction market’s resolution when necessary. A wallet executes the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/558e38be828647c3d539cd1d2c6d96c0eb7f442f/src/PredictionMarketOracleController.sol#L84) contract’s `addTrigger` function, which triggers WAVS to run this oracle by emitting an event. Then, WAVS commits the response from this oracle component with a signature back to the contract on-chain, and the market is resolved.
 
 Performing this market resolution via WAVS means prediction markets can exist in a fully decentralized manner. Because money is on the line, entrusting any party to honestly resolve the market is a critical security decision—WAVS enables distributing this trust over multiple independent parties, taking advantage of the verifiability and security of the existing WAVS infrastructure instead of relying on any centralized individual.
 
 ## Try it out
 
-You can run the prediction market demo locally by following the steps from the [README](https://github.com/Lay3rLabs/wavs-demos/blob/noah/prediction-market/PREDICTION_MARKET_DEMO.md).
+You can run the prediction market demo locally by following the steps from the [README](https://github.com/Lay3rLabs/wavs-demos/blob/a8d24359391d51bc894afa6e2fbef045bf6ec051/PREDICTION_MARKET_DEMO.md).

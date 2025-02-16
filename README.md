@@ -2,7 +2,7 @@
 
 Welcome to the official documentation for WAVS, a WASI AVS runtime for streamlined AVS development.
 
-These docs were built using [Fumadocs](https://fumadocs.vercel.app/docs/ui).
+Live site: https://docs.wavs.xyz/
 
 ## Build Locally
 
@@ -10,6 +10,8 @@ These docs were built using [Fumadocs](https://fumadocs.vercel.app/docs/ui).
 npm i
 npm run dev
 ```
+
+These docs were created using [Fumadocs](https://fumadocs.vercel.app/docs/ui).
 
 ## Updating the theme
 
