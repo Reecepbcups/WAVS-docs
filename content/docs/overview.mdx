@@ -24,8 +24,7 @@ Finally, WAVS utilizes restaking (via EigenLayer) to secure its AVSs. A service 
 WAVS supports a wide range of AVSs use cases, enabling powerful, verifiable off-chain computation across different domains:
 
 - **Decentralized AI**: WAVS unlocks decentralized AI that is [deterministic and verifiable](https://www.layer.xyz/news-and-insights/deterministic-ai), enabling trustless decision-making and autonomous governance through DAO-controlled AI agents.
-- **Oracles**: Create and dynamically deploy new oracles as easily as uploading a component to your service to verifiably bring data from any source on-chain.
-{/* todo: link to oracle example */}
+- **Oracles**: [Create](./tutorial/1-overview) and dynamically deploy new oracles as easily as uploading a component to your service to verifiably bring data from any source on-chain.
 - **Zero Knowledge Proofs**: ZK verifiers, ZK Prover Marketplaces, and ZK aggregation layers can be deployed as lightweight WAVS [service components](#service-components), making it simple to build modular and composable proof services.
 - **Crosschain Bridges**: Build secure, decentralized bridges with WAVS. Lock assets on one chain, trigger a verifiable service component, and mint them on another—all with trust-minimized execution.
 - **Dynamic applications**: WAVS combines on-chain and off-chain services to build a cross-chain, decentralized application layer.
@@ -57,8 +56,8 @@ Service components can contain logic for processing input data from triggers. If
 
 <img alt="WAVS" src="/diagrams/service.png" />
 
-To learn more about service components, visit the [How it works](/how-it-works#service-components) page. Check out the WAVS tutorial to learn how to create a service component.
-{/* todo: link above^^^^ */}
+To learn more about service components, visit the [How it works](/how-it-works#service-components) page. Check out the [WAVS tutorial](./tutorial/1-overview) to learn how to create a service component.
+
 
 ### Submission logic
 
@@ -71,7 +70,6 @@ Once a trigger, a service component, and submission logic are created, you can d
 
 <img alt="WAVS" src="/diagrams/wavs-flow.png" />
 
-{/* todo: Link to info about WASI and the runtime */}
 
 With WAVS, service updates are streamlined: updates to services can be made by AVS builders directly without needing to coordinate with operators. Operators only need to upgrade if there is a change to the WAVS node software itself.
 

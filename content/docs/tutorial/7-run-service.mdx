@@ -60,7 +60,7 @@ TRIGGER_EVENT="NewTrigger(bytes)" make deploy-service
 
 Next, use your deployed trigger contract to trigger the oracle to be run. In the following command, you'll specify the `COIN_MARKET_CAP_ID` as `1`, which corresponds to the ID of Bitcoin.
 
-Running this command will execute `/script/Trigger.s.sol` and pass the ID to the trigger contract, starting the following chain of events:
+Running this command will execute [`/script/Trigger.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/7b8642bad3b4475152f8f00330b5cb2f23b42489/script/Trigger.s.sol) and pass the ID to the trigger contract, starting the following chain of events:
 
 1. The trigger contract will emit an event with the specified ID as its data.
 2. Operators listening for the event will receive the data and run it in the oracle component off-chain.
