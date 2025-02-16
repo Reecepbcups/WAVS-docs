@@ -33,7 +33,7 @@ The WAVS platform consists of several different parts which work together to for
 
 - [Triggers](#triggers): defined events that trigger a component to be run.
 - [Service components](#service-components): WASI components written in Rust (with support for other languages coming soon) that contain the core logic of a service.
-- [Submission contracts](#submission-contracts): for the on-chain submission of results.
+- [Submission](#submission): contracts for the for the on-chain submission of results.
 - [The WAVS runtime](#wavs-runtime): an off-chain execution environment for service components powered by WASM.
 - [Operators](#operators): node participants that opt into running services.
 
@@ -56,17 +56,13 @@ Service components are lightweight and built for adaptability. Building a servic
 
 Service components are also designed for composability: an AVS can chain multiple components together, creating decentralized flows of off-chain and off-chain executions. These intelligent protocols merge the performance of off-chain computation with on-chain verifiability, creating a complex mesh of decentralized transaction flows.
 
-## Submission contracts
+## Submission
 
-WAVS services rely on on-chain contracts for the on-chain submission of the results from off-chain executions. The two key submission contracts are the Service Manager and the Service Handler.
+WAVS services rely on on-chain contracts for the validation and on-chain submission of the results of off-chain computations.
 
-### Service Manager Contract
+AVS builders can specify a `Service Handler` as their submission contract. After the execution of a service component in the WAVS runtime, the results can be passed to this contract, which contains validation and submission logic for the service. A `Service Handler` can be any contract that provides the necessary interface for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
 
-The Service Manager acts as the intermediary between EigenLayer and WAVS, ensuring that execution results are properly verified before being processed further. It validates data and operator signatures, enforces EigenLayer restaking policies, and forwards verified results to the appropriate Service Handler for final processing.
-
-### Service Handler Contract
-
-A Service Handler is responsible for receiving and processing validated data from the Service Manager.  It can be any contract, as long as it provides the necessary interface for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
+A `Service Handler` can validate results by calling the `Service Manager` contract. The `Service Manager` acts as the intermediary between EigenLayer and WAVS, validating data and operator signatures and enforcing EigenLayer security policies.
 
 ## WAVS Runtime
 The WAVS (WASI-AVS) runtime serves as the off-chain execution environment for all services running on the WAVS platform. Powered by operators running the WAVS node software, it provides a structured framework for deploying and managing service components that run within a WASI (WebAssembly System Interface) environment.
