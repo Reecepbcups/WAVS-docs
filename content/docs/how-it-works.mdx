@@ -21,11 +21,11 @@ Before diving into each part of a WAVS service individually, it's important to u
 
 In this example, on-chain events can trigger service components, which are run off-chain by operators in the WASI AVS runtime. Results are then brought back on-chain, enabling the decentralized execution of off-chain services which are verifiable on-chain.
 
-1. An AVS builder defines their service with a trigger, a service component, and submission logic.
+1. An AVS builder defines their service with a [trigger](#triggers), a [service component](#service-components), and [submission](#submission) logic.
 2. Operators listen for on-chain events specified in the trigger contract.
 3. An on-chain event triggers a task, and operators run the corresponding service component off-chain.
-4. Operators sign the result of the task, and the signatures are sent to the aggregator.
-5. Results are aggregated and submitted on-chain.
+4. Operators sign the result of the task, and the signatures are sent to the aggregator (optional).
+5. Results are aggregated and submitted on-chain according to the [submission logic](#submission).
 
 ## WAVS parts
 
@@ -58,13 +58,14 @@ Service components are also designed for composability: an AVS can chain multipl
 
 ## Submission
 
-WAVS services rely on on-chain contracts for the validation and on-chain submission of the results of off-chain computations.
+WAVS services save their off-chain computations to an on-chain submission contract. This contract validates input data and confirms the submission address is an AVS operator.
 
-AVS builders can specify a `Service Handler` as their submission contract. After the execution of a service component in the WAVS runtime, the results can be passed to this contract, which contains validation and submission logic for the service. A `Service Handler` can be any contract that provides the necessary interface for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
+AVS builders can specify a `Service Handler` as their submission contract. After the execution of a service component in the WAVS runtime, the results can be passed to this contract, which contains validation and submission logic for the service. A `Service Handler` can be any contract that provides the [necessary interface](https://www.npmjs.com/package/@wavs/solidity?activeTab=code) for handling service execution. Developers can use this contract to define their own logic for results and implement different rules depending on the specific needs of their service.
 
 A `Service Handler` can validate results by calling the `Service Manager` contract. The `Service Manager` acts as the intermediary between EigenLayer and WAVS, validating data and operator signatures and enforcing EigenLayer security policies.
 
 ## WAVS Runtime
+
 The WAVS (WASI-AVS) runtime serves as the off-chain execution environment for all services running on the WAVS platform. Powered by operators running the WAVS node software, it provides a structured framework for deploying and managing service components that run within a WASI (WebAssembly System Interface) environment.
 You can think of WASI as a lightweight OS-like interface, offering a standard set of APIs that allow service components to perform system-level operations such as file handling and environment interactions. WAVS enables service components to execute securely within this WASI-powered sandbox, ensuring isolation from both the host system and other components.
 
