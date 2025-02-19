@@ -7,7 +7,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 import { Scrollycoding } from "@/components/scrollycoding";
 import { link } from "@/components/link.tsx"
 
-The core logic of the price oracle in this example is located in the [`/eth-price-oracle/src/lib.rs` file](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/components/eth-price-oracle/src/lib.rs). Scroll down to follow a walkthrough of the code for the oracle component.
+The core logic of the price oracle in this example is located in the [`/eth-price-oracle/src/lib.rs` file](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/components/eth-price-oracle/src/lib.rs). Scroll down to follow a walkthrough of the code for the oracle component.
 
 
 <HoverContainer>
@@ -15,7 +15,7 @@ The core logic of the price oracle in this example is located in the [`/eth-pric
 
 ## !!steps trigger.rs
 
-The [trigger.rs](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/components/eth-price-oracle/src/trigger.rs) file handles the decoding of incoming trigger data and preparing it for processing within the WAVS component. The `encode_trigger_output` function ensures that processed data is formatted correctly before being sent back. Update the code if you require different trigger types (e.g. Cosmos events) or if you are building a [custom trigger](./5-build#custom-triggers).
+The [trigger.rs](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/components/eth-price-oracle/src/trigger.rs) file handles the decoding of incoming trigger data and preparing it for processing within the WAVS component. The `encode_trigger_output` function ensures that processed data is formatted correctly before being sent back. Update the code if you require different trigger types (e.g. Cosmos events) or if you are building a [custom trigger](./5-build#custom-triggers).
 
 
 ```rust ! trigger.rs
@@ -57,7 +57,7 @@ mod solidity {
 
 ## !!steps Oracle component definitions
 
-The [`lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/main/components/eth-price-oracle/src/lib.rs) file contains the main component logic for the oracle. The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
+The [`lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/components/eth-price-oracle/src/lib.rs) file contains the main component logic for the oracle. The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
 
 ```rust ! lib.rs
 // !focus(1:13)
@@ -386,7 +386,7 @@ The price data is ready to be submitted by operators via the submission contract
 
 When developing your own WASI component, it's helpful to use logging methods in your code. Components write all their standard output and errors (`stdout` or `stderr`) to the host machine.
 
-In this example, `println!()` is used in `fn run()` to debug `input id` and `resp_data` while processing price feed requests asynchronously. This will write to `stdout` and is visible in local development when you run the [`wasi-exec` command](./5-build#execute-wasi-component-directly) in the next section of this guide.
+In this example, `println!()` is used in `fn run()` to debug `input id` and `resp_data` while processing price feed requests asynchronously. This will write to `stdout` and is visible in local development when you run the [`wasi-exec` command](./5-build#testing-and-debugging) in the next section of this guide.
 
 For production, you can use a `host::log()` function log which takes a LogLevel and writes its output via the tracing mechanism. Along with the string that the developer provides, it attaches additional context such as the `ServiceID`, `WorkflowID` and component `Digest`.
 

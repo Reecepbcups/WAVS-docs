@@ -38,7 +38,7 @@ Open a new terminal and run the following command from the root of your project 
 make deploy-contracts
 ```
 
-This command uses the script located in [`script/Deploy.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/script/Trigger.s.sol) to deploy your contracts.
+This command uses the script located in [`script/Deploy.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/script/Trigger.s.sol) to deploy your contracts.
 
 <Callout title="Deployed addresses" type="info">
 
@@ -65,11 +65,11 @@ The following command will deploy your WASI component and service information to
 make deploy-service
 ```
 
-This command specifies the event emitted from your trigger contract as the on-chain event that will trigger your service. In the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L95-L103), you can also see that it specifies the submission contract as the `submit-address`, as well as the filename of your component.
+This command specifies the event emitted from your trigger contract as the on-chain event that will trigger your service. In the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/Makefile#L95-L102), you can also see that it specifies the submission contract as the `submit-address`, as well as the filename of your component.
 
 <Callout title="Customize variables" type="info">
 
-Open the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/3d6413e0e95bab3b8a4688b5e4e07b415d3c44bd/Makefile#L9-L22) to view the different variables that you can customize, including the trigger event, the component filename, and the service config.
+Open the [`Makefile`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/Makefile#L9-L22) to view the different variables that you can customize, including the trigger event, the component filename, and the service config.
 
 You can also modify variables by specifying them before running the `make` command:
 
@@ -84,7 +84,7 @@ TRIGGER_EVENT="NewTrigger(bytes)" make deploy-service
 
 Next, use your deployed trigger contract to trigger the oracle to be run. In the following command, you'll specify the `COIN_MARKET_CAP_ID` as `1`, which corresponds to the ID of Bitcoin.
 
-Running this command will execute [`/script/Trigger.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/7b8642bad3b4475152f8f00330b5cb2f23b42489/script/Trigger.s.sol) and pass the ID to the trigger contract, starting the following chain of events:
+Running this command will execute [`/script/Trigger.s.sol`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/fd9d6895e3ebf40373c82c0169c8f93c2553f5a3/script/Trigger.s.sol) and pass the ID to the trigger contract, starting the following chain of events:
 
 1. The trigger contract will emit an event with the specified ID as its data.
 2. Operators listening for the event will receive the data and run it in the oracle component off-chain.
