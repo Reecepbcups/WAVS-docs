@@ -64,7 +64,7 @@ import {Layers, Microscope } from 'lucide-react';
 
 ```
 import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
- 
+
 <Tabs items={['Javascript', 'Rust']}>
   <Tab value="Javascript">Javascript is weird</Tab>
   <Tab value="Rust">Rust is fast</Tab>
