@@ -21,9 +21,11 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
 
   return (
     <div className="border rounded relative">
-      <div className="text-center text-zinc-400 text-sm">
-        {highlighted.meta}
-      </div>
+{highlighted.meta && (
+  <div className="text-center text-zinc-400 text-sm min-h-[2rem] flex items-center justify-center">
+    {highlighted.meta}
+  </div>
+)}
       <Pre
         code={highlighted}
         handlers={[
