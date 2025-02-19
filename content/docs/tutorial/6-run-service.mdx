@@ -1,8 +1,32 @@
 ---
-title: 7. Run your service
+title: 6. Run your service
 ---
 import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+
+## Start Anvil, WAVS, and Deploy Eigenlayer
+
+1. Create a `.env` file for your project by copying over the example with the following command:
+
+```bash
+cp .env.example .env
+```
+
+2. Use the following command to start an Anvil test chain and the WAVS runtime while deploying core EigenLayer contracts for your service:
+
+```bash
+make start-all
+```
+
+<Callout title="Keep WAVS running" type="info">
+
+The `start-all` command must remain running in your terminal. Open another terminal to run other commands.
+
+You can stop the services with `ctrl+c`. Some MacOS terminals require pressing this twice.
+
+</Callout>
+
 
 With the chain and WAVS running, you can deploy and run your service.
 
