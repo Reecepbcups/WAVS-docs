@@ -5,6 +5,24 @@ import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 
+<Callout title="Docker for MacOS" type="warn">
+
+{/* This section is also in [](./2-setup.mdx). Remember to update there as well */}
+
+Make sure that Docker is installed. If you are using Docker Desktop, make sure it is open and running.
+
+Before proceeding, make sure that the following setting is updated:
+
+**Enable Host Networking**: Open Docker and navigate to -> Settings -> Resources -> Network. Make sure that 'Enable Host Networking' is turned on.
+
+Alternatively, you can install the following:
+
+```bash
+brew install chipmk/tap/docker-mac-net-connect && sudo brew services start chipmk/tap/docker-mac-net-connect
+```
+
+</Callout>
+
 ## Build WASI component
 
 Run the following command in your terminal to build your component.
