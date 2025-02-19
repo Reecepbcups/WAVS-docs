@@ -106,7 +106,23 @@ Visit the [Docker Documentation](https://docs.docker.com/get-started/get-docker/
 
 </Tabs>
 
+<Callout title="Docker for MacOS" type="warn">
 
+{/* This section is also in [](./5-build.mdx). Remember to update there as well */}
+
+If you are using Docker Desktop, make sure it is open and running for this tutorial.
+
+Before proceeding, make sure that the following setting is updated:
+
+**Enable Host Networking**: Open Docker and navigate to -> Settings -> Resources -> Network. Make sure that 'Enable Host Networking' is turned on.
+
+Alternatively, you can install the following:
+
+```bash
+brew install chipmk/tap/docker-mac-net-connect && sudo brew services start chipmk/tap/docker-mac-net-connect
+```
+
+</Callout>
 
 ## Make
 
