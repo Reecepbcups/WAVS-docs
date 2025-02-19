@@ -22,10 +22,8 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
   return (
     <div className="border rounded relative">
       <div className="text-center text-zinc-400 text-sm">
-      <CopyButton text={highlighted.code} />
         {highlighted.meta}
       </div>
-
       <Pre
         code={highlighted}
         handlers={[
@@ -44,6 +42,7 @@ export async function Code({ codeblock }: { codeblock: RawCode }) {
         ]}
         className="m-0 bg-card rounded"
       />
+            <CopyButton text={highlighted.code} />
     </div>
   );
 }
