@@ -13,7 +13,7 @@ Prediction market demo repo: https://github.com/Lay3rLabs/wavs-demos/tree/main
 
 ## What is a prediction market?
 
-A prediction market is a marketplace that gathers insights about the future by rewarding participants for making accurate predictions based on available information. For example, a prediction market could be created for whether it will snow in Oslo on November 5th. Users can create positions by depositing money based on two outcomes: yes or no. After the event transpires, an oracle service can be used to bring in the weather outcome, resolving the market, and rewarding those who predicted correctly.
+A prediction market is a marketplace that gathers insights about the future by rewarding participants for making accurate predictions based on available information. For example, a prediction market could be created for whether it will snow in Oslo on November 5th. Users can create positions by depositing money based on two outcomes: yes or no. After the event transpires, an oracle service can be used to bring in the weather outcome, resolving the market and rewarding those who predicted correctly.
 
 ## How does it work?
 
@@ -64,13 +64,13 @@ function addTrigger(
 
 Take a look at the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/06bc235983c3dada4c14494d43f8151bf3f56d79/src/PredictionMarketOracleController.sol) file to get an idea of how the contract is structured.
 
-This contract is responsible for interacting with the oracle service, triggering WAVS to run the oracle, waiting for the oracle’s response, and telling the market factory to resolve the market.
+This contract is responsible for interacting with the oracle service, triggering WAVS to run the oracle, waiting for the oracle's response, and telling the market factory to resolve the market.
 
 ### Oracle WASI Component
 
-Similar to the oracle you created in the tutorial, the prediction market uses a simple oracle service to resolve a market by bringing  off-chain data  on-chain.
+Similar to the oracle you created in the tutorial, the prediction market uses a simple oracle service to resolve a market by bringing off-chain data on-chain.
 
-This WASI component runs in WAVS and fetches the prediction market’s resolution when necessary. A wallet executes the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/06bc235983c3dada4c14494d43f8151bf3f56d79/src/PredictionMarketOracleController.sol#L84) contract’s `addTrigger` function, which triggers WAVS to run this oracle by emitting an event. Then, WAVS commits the response from this oracle component with a signature back to the contract on-chain, and the market is resolved.
+This WASI component runs in WAVS and fetches the prediction market's resolution when necessary. A wallet executes the [`PredictionMarketOracleController.sol`](https://github.com/Lay3rLabs/wavs-demos/blob/06bc235983c3dada4c14494d43f8151bf3f56d79/src/PredictionMarketOracleController.sol#L84) contract's `addTrigger` function, which triggers WAVS to run this oracle by emitting an event. Then, WAVS commits the response from this oracle component with a signature back to the contract on-chain, and the market is resolved.
 
 Performing this market resolution via WAVS means prediction markets can exist in a fully decentralized manner. Because money is on the line, entrusting any party to honestly resolve the market is a critical security decision—WAVS enables distributing this trust over multiple independent parties, taking advantage of the verifiability and security of the existing WAVS infrastructure instead of relying on any centralized individual.
 

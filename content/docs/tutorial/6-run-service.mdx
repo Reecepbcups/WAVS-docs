@@ -89,7 +89,7 @@ Running this command will execute [`/script/Trigger.s.sol`](https://github.com/L
 1. The trigger contract will emit an event with the specified ID as its data.
 2. Operators listening for the event will receive the data and run it in the oracle component off-chain.
 3. The oracle component will use the ID to query the price of Bitcoin from the CoinMarketCap API.
-4. The Returned data will be signed by operators and passed to the submission contract which will verify the operator's signature and submit the price of Bitcoin on-chain 🎉
+4. The returned data will be signed by operators and passed to the submission contract, which will verify the operator's signature and submit the price of Bitcoin on-chain 🎉
 
 
 ```bash

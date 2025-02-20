@@ -388,7 +388,7 @@ When developing your own WASI component, it's helpful to use logging methods in 
 
 In this example, `println!()` is used in `fn run()` to debug `input id` and `resp_data` while processing price feed requests asynchronously. This will write to `stdout` and is visible in local development when you run the [`wasi-exec` command](./5-build#testing-and-debugging) in the next section of this guide.
 
-For production, you can use a `host::log()` function log which takes a LogLevel and writes its output via the tracing mechanism. Along with the string that the developer provides, it attaches additional context such as the `ServiceID`, `WorkflowID` and component `Digest`.
+For production, you can use a `host::log()` function which takes a `LogLevel` and writes its output via the tracing mechanism. Along with the string that the developer provides, it attaches additional context such as the `ServiceID`, `WorkflowID`, and component `Digest`.
 
 ```rust ! lib.rs
 impl Guest for Component {
