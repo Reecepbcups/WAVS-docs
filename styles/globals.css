@@ -1,0 +1,8 @@
+:root {
+  --accent: #0070f3;  /* or whatever your accent color value is */
+}
+
+/* Make all links accent colored by default */
+a {
+  @apply text-accent hover:underline;
+} 
