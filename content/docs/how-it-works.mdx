@@ -6,11 +6,11 @@ import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 <img alt="WAVS" src="/banners/how.png" />
 
-WAVS is a decentralized execution framework for AVSs (Autonomous Verifiable Services), enabling the results of off-chain computation to be brought verifiably on-chain. It provides a runtime for executing WASI-based service components, allowing developers to define event-driven off-chain workflows while inheriting Ethereum’s security via EigenLayer restaking.
+WAVS is a decentralized execution framework for AVSs (Autonomous Verifiable Services), enabling the results of off-chain computation to be brought verifiably on-chain. It provides a runtime for executing WASI-based service components, allowing developers to define event-driven off-chain workflows while inheriting Ethereum's security via EigenLayer restaking.
 
-When an on-chain contract emits an event, WAVS operators listen, execute the corresponding service component off-chain, and sign the result. Results can then be submitted on-chain or passed to other services. This allows AVSs to process complex computations off-chain at near-native speed, while maintaining on-chain verifiability.
+When an on-chain contract emits an event, WAVS operators listen, execute the corresponding service component off-chain, and sign the result. Results can then be submitted on-chain or passed to other services. This allows AVSs to process complex computations off-chain at near-native speed while maintaining on-chain verifiability.
 
-The WAVS platform is made up of service components, operator networks, and on-chain contracts, forming a decentralized execution layer that extends the capabilities of smart contracts to off-chain executions.
+The WAVS platform comprises service components, operator networks, and on-chain contracts, forming a decentralized execution layer that extends the capabilities of smart contracts to off-chain executions.
 
 
 ## The flow
@@ -19,7 +19,7 @@ Before diving into each part of a WAVS service individually, it's important to u
 
 <img alt="WAVS overview" src="/diagrams/flow.png" />
 
-In this example, on-chain events can trigger service components, which are run off-chain by operators in the WASI AVS runtime. Results are then brought back on-chain, enabling the decentralized execution of off-chain services which are verifiable on-chain.
+In this example, on-chain events can trigger service components, which are run off-chain by operators in the WASI AVS runtime. Results are then brought back on-chain, enabling the decentralized execution of off-chain services that are verifiable on-chain.
 
 1. An AVS builder defines their service with a [trigger](#triggers), a [service component](#service-components), and [submission](#submission) logic.
 2. Operators listen for on-chain events specified in the trigger contract.
@@ -29,11 +29,11 @@ In this example, on-chain events can trigger service components, which are run o
 
 ## WAVS parts
 
-The WAVS platform consists of several different parts which work together to form a decentralized off-chain execution layer for AVSs.
+The WAVS platform consists of several different parts that work together to form a decentralized off-chain execution layer for AVSs.
 
 - [Triggers](#triggers): defined events that trigger a component to be run.
 - [Service components](#service-components): WASI components written in Rust (with support for other languages coming soon) that contain the core logic of a service.
-- [Submission](#submission): contracts for the for the on-chain submission of results.
+- [Submission](#submission): contracts for the on-chain submission of results.
 - [The WAVS runtime](#wavs-runtime): an off-chain execution environment for service components powered by WASM.
 - [Operators](#operators): node participants that opt into running services.
 
@@ -50,11 +50,11 @@ When a specified event is emitted on-chain, WAVS operators detect it and execute
 
 ## Service components
 
-Service components are the heart of the WAVS platform, encapsulating the core logic that powers a service. They are written in Rust (with support for other languages coming soon) which contains all of the necessary computational logic to run a service. These service components are compiled to WASM and are uploaded to the WAVS platform where they can be run by operators. In the WAVS runtime, service components are sandboxed from each other and from the node's operating system. This way, operators and AVS services maintain a clean separation, with AVS builders defining service components and operators having to opt-in to each service.
+Service components are the heart of the WAVS platform, encapsulating the core logic that powers a service. They are written in Rust (with support for other languages coming soon), which contains all the necessary computational logic to run a service. These service components are compiled to WASM and are uploaded to the WAVS platform where they can be run by operators. In the WAVS runtime, service components are sandboxed from each other and from the node's operating system. This way, operators and AVS services maintain a clean separation, with AVS builders defining service components and operators having to opt in to each service.
 
 Service components are lightweight and built for adaptability. Building a service used to take thousands of lines of code and the configuration of dozens of files to execute even the simplest logic. With WAVS, service components can consist of a few lines of code that can be dynamically deployed to the WAVS platform.
 
-Service components are also designed for composability: an AVS can chain multiple components together, creating decentralized flows of off-chain and off-chain executions. These intelligent protocols merge the performance of off-chain computation with on-chain verifiability, creating a complex mesh of decentralized transaction flows.
+Service components are also designed for composability: an AVS can chain multiple components together, creating decentralized flows of off-chain and on-chain executions. These intelligent protocols merge the performance of off-chain computation with on-chain verifiability, creating a complex mesh of decentralized transaction flows.
 
 ## Submission
 
@@ -73,21 +73,21 @@ You can think of WASI as a lightweight OS-like interface, offering a standard se
 
 [WASM (Web Assembly)](https://webassembly.org/) is a high-performance, low-level binary format that can be compiled from multiple programming languages. WASM can even run in web browsers at near-native speed. By leveraging WASM, AVSs built with WAVS are lightning-fast, lightweight, and easy to develop.
 
-WASI (WebAssembly System Interface) is a standardized API that enables WASM (WebAssembly) modules to interact with a host system in a secure and platform-independent way. It provides Wasm modules with a standardized set of APIs to access system resources. For more information, visit the [WASI documentation](https://wasi.dev/).
+WASI (WebAssembly System Interface) is a standardized API that enables WASM (WebAssembly) modules to interact with a host system in a secure and platform-independent way. It provides WASM modules with a standardized set of APIs to access system resources. For more information, visit the [WASI documentation](https://wasi.dev/).
 
 There are significant advantages in leveraging a WASM/WASI-based platform for AVSs:
 
 - Lightweight execution: Service components are lightweight WASM binaries ideal for high-frequency, low-latency AVS tasks.
 - Speed: components can run in the WASI environment at near-native speeds, providing a significant advantage over Dockerized AVSs.
-- Low overhead: Instead of each service needing its own dedicated docker container, the WAVS runtime provides a computational layer that can be used by many components, saving storage and startup time.
+- Low overhead: Instead of each service needing its own dedicated Docker container, the WAVS runtime provides a computational layer that can be used by many components, saving storage and startup time.
 - Dynamic deployment: to upgrade a service, simply upload a new component and update your service metadata to point to the new component. No more downtime or coordination of new binaries among operators.
 - Security and separation: The WAVS WASI runtime enforces security by sandboxing service components, allowing them to interact with the host (WAVS) only through explicitly permitted WASI APIs.
 
 ## Operators
 
-Operators are network participants that run the WAVS runtime and "operate" different services.  Similar to validators in a proof of stake network, users can stake (or restake) to operators and provide cryptoeconomic security to services.
+Operators are network participants that run the WAVS runtime and "operate" different services. Similar to validators in a proof-of-stake network, users can stake (or restake) to operators and provide crypto-economic security to services.
 
-Operators can opt-in to running different services by registering with them. Once registered, operators listen for on-chain triggers and run the associated service component off-chain. Then, the operator takes the results of the computation, verifies it, and submits it on-chain.
+Operators can opt in to running different services by registering with them. Once registered, operators listen for on-chain triggers and run the associated service component off-chain. Then, the operator takes the results of the computation, verifies them, and submits them on-chain.
 
 ### Signing and aggregation
 
@@ -97,6 +97,6 @@ For services that submit results on Ethereum, an off-chain aggregator can be use
 
 ## Updating a service
 
-Because of the lightweight and portable nature of WebAssembly, WAVS operators only need to run a single docker image. WAVS provides a runtime for all registered services to run, each sandboxed from the other and from the node’s operating system due to the nature of [WASI](#wasm-and-wasi). Operators will need to opt in to running different services by registering to an AVS
+Because of the lightweight and portable nature of WebAssembly, WAVS operators only need to run a single Docker image. WAVS provides a runtime for all registered services to run, each sandboxed from the other and from the node's operating system due to the nature of [WASI](#wasm-and-wasi). Operators will need to opt in to running different services by registering to an AVS.
 
 Updates to service logic do not require node upgrades. Instead, developers can dynamically deploy a new service component and update their service. Instead of needing to run a new Docker image every time a service is updated, operators only need to upgrade if there is a breaking change to the WAVS node software itself.

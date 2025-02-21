@@ -62,8 +62,7 @@ html.light {
   --ch-26: #ffffffe6;
 }
 
-/* ****** */
-
+/* ****** BASE STYLES ****** */
 @layer base {
   :root {
     --text-primary: 210, 5%, 9%, 1;
@@ -75,7 +74,6 @@ html.light {
     --border-primary: 195, 5%, 15%, 0.1;
     --border-secondary: 195, 5%, 15%, 0.05;
 
-    /* --background-base: 0, 0%, 100%, 1.0; */
     --background-base: 195, 5%, 95%, 1;
     --background-primary: 195, 5%, 15%, 0.08;
     --background-secondary: 195, 5%, 15%, 0.05;
@@ -84,6 +82,8 @@ html.light {
 
     --ring: 215 20.2% 65.1%;
     --radius: 0.5rem;
+
+    --tw-prose-links: hsl(var(--text-accent));
   }
 
   .dark {
@@ -96,7 +96,6 @@ html.light {
     --border-primary: 204, 26%, 96%, 0.15;
     --border-secondary: 204, 26%, 96%, 0.05;
 
-    /* --background-base: 210, 5%, 9%, 1.0; */
     --background-base: 264, 9%, 11%, 1;
     --background-primary: 204, 26%, 96%, 0.08;
     --background-secondary: 204, 26%, 96%, 0.05;
@@ -108,6 +107,7 @@ html.light {
   }
 }
 
+/* ****** GENERAL STYLES ****** */
 @layer base {
   * {
     @apply border-border;
@@ -118,44 +118,46 @@ html.light {
   }
 }
 
-/* h1 {
-  font-size: 26px;
-  font-style: normal;
-  font-weight: 700;
-  line-height: 32px;
+/* ****** PROSE LINKS ****** */
+.prose p a,
+.prose li a {
+  color: var(--tw-prose-links);
+  text-decoration: none;
+  opacity: 0.85; /* Slightly lighter when not hovered */
+  transition: color 0.2s ease, opacity 0.2s ease, text-decoration 0.2s ease;
 }
 
-h2 {
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 24px;
+.prose p a:hover,
+.prose li a:hover {
+  color: hsl(var(--text-accent)); /* Darker on hover */
+  text-decoration: underline;
+  opacity: 1; /* Full opacity on hover */
 }
 
-h3 {
-  font-size: 16px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 20px;
+/* Ensure links in headings don't inherit --tw-prose-links */
+.prose h1 a,
+.prose h2 a,
+.prose h3 a,
+.prose h4 a,
+.prose h5 a,
+.prose h6 a {
+  color: inherit; /* Resets link color in headings */
 }
 
-h4 {
-  font-size: 15px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: 20px;
-}
-
-p {
-  font-size: 14px;
-  font-style: normal;
-  font-weight: 400;
-  line-height: 20px;
-} */
-
+/* ****** HOVER EFFECTS ****** */
 .hover-container:has([data-hover="one"]:hover)
   [data-line]:not([data-line="one"]),
 .hover-container:has([data-hover="two"]:hover)
   [data-line]:not([data-line="two"]) {
   opacity: 0.4;
 }
+
+/* ****** Inline Code ****** */
+.prose code {
+  background-color: hsl(var(--background-tertiary));
+  border: 1px solid hsl(var(--border-secondary));
+  padding: 0.2rem 0.4rem;
+  border-radius: 0.25rem;
+  font-family: monospace;
+}
+
