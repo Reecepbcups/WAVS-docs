@@ -5,21 +5,13 @@ import { Callout } from 'fumadocs-ui/components/callout';
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
 
-<Callout title="Docker for MacOS" type="warn">
+<Callout title="Docker" type="warn">
 
 {/* This section is also in [](./2-setup.mdx). Remember to update there as well */}
 
 Make sure that Docker is installed. If you are using Docker Desktop, make sure it is open and running.
 
-Before proceeding, make sure that the following setting is updated:
-
-**Enable Host Networking**: Open Docker and navigate to Settings -> Resources -> Network. Make sure that 'Enable Host Networking' is turned on.
-
-Alternatively, you can install the following:
-
-```bash
-brew install chipmk/tap/docker-mac-net-connect && sudo brew services start chipmk/tap/docker-mac-net-connect
-```
+If you are using Mac OS, make sure that your[ Docker app is configured correctly](./2-setup#docker).
 
 </Callout>
 
@@ -31,7 +23,7 @@ Run the following command in your terminal to build your component.
 make wasi-build
 ```
 
-This command will build any components present in the `/components` directory, as well as auto-generate bindings and compile the components to WASM.
+This command will build any components present in the `/components` directory, as well as auto-generate bindings and compile the components to WASM. The output will be placed in the `compiled` directory.
 
 <Callout title="Build command" type="info">
 You can also use the command below to build your solidity contracts and components in one command:
@@ -45,6 +37,9 @@ make build
 ## Testing and debugging
 
 You can use the following command to execute the component using Cast. This command is handy for testing components without having to deploy WAVS.
+
+An ID of 1 is Bitcoin. Nothing will be saved on-chain, just the output of the component is shown.
+
 
 ```bash
 make wasi-exec
