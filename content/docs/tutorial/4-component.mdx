@@ -7,7 +7,7 @@ import { Callout } from 'fumadocs-ui/components/callout';
 import { Scrollycoding } from "@/components/scrollycoding";
 import { link } from "@/components/link.tsx"
 
-The core logic of the price oracle in this example is located in the [`/eth-price-oracle/src/lib.rs` file](https://github.com/Lay3rLabs/wavs-foundry-template/blob/6fb281c9382ceefdc8538b7a8e29916c509aafc9/components/eth-price-oracle/src/lib.rs). Scroll down to follow a walkthrough of the code for the oracle component.
+The core logic of the price oracle in this example is located in the [`/eth-price-oracle/src/lib.rs` file](https://github.com/Lay3rLabs/wavs-foundry-template/tree/v0.3.0-rc1/components/eth-price-oracle/src/lib.rs). Scroll down to follow a walkthrough of the code for the oracle component.
 
 
 <HoverContainer>
@@ -15,7 +15,7 @@ The core logic of the price oracle in this example is located in the [`/eth-pric
 
 ## !!steps trigger.rs
 
-The [trigger.rs](https://github.com/Lay3rLabs/wavs-foundry-template/blob/6fb281c9382ceefdc8538b7a8e29916c509aafc9/components/eth-price-oracle/src/trigger.rs) file handles the decoding of incoming trigger data and preparing it for processing within the WAVS component. The `encode_trigger_output` function ensures that processed data is formatted correctly before being sent back. Update the code if you require different trigger types (e.g. Cosmos events) or if you are building a [custom trigger](./5-build#custom-triggers).
+The [trigger.rs](https://github.com/Lay3rLabs/wavs-foundry-template/tree/v0.3.0-rc1/components/eth-price-oracle/src/trigger.rs) file handles the decoding of incoming trigger data and preparing it for processing within the WAVS component. The `encode_trigger_output` function ensures that processed data is formatted correctly before being sent back. Update the code if you require different trigger types (e.g. Cosmos events) or if you are building a [custom trigger](./5-build#custom-triggers).
 
 
 ```rust ! trigger.rs
@@ -57,7 +57,7 @@ mod solidity {
 
 ## !!steps Oracle component definitions
 
-The [`lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/blob/6fb281c9382ceefdc8538b7a8e29916c509aafc9/components/eth-price-oracle/src/lib.rs) file contains the main component logic for the oracle. The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
+The [`lib.rs`](https://github.com/Lay3rLabs/wavs-foundry-template/tree/v0.3.0-rc1/components/eth-price-oracle/src/lib.rs) file contains the main component logic for the oracle. The first section of the code imports the required modules for requests, serialization, and bindings, defines the component struct, and exports the component for execution within the WAVS runtime.
 
 ```rust ! lib.rs
 // !focus(1:13)
@@ -73,7 +73,7 @@ struct Component;
 export!(Component with_types_in bindings);
 
 impl Guest for Component {
-    fn run(action: TriggerAction) -> std::result::Result<Vec<u8>, String> {
+    fn run(action: TriggerAction) -> std::result::Result<Option<Vec<u8>>, String> {
         let (trigger_id, req, dest) =
             decode_trigger_event(action.data).map_err(|e| e.to_string())?;
 
@@ -85,25 +85,16 @@ impl Guest for Component {
         let id = id.to_digit(16).ok_or("Invalid hex digit")? as u64;
 
         let res = block_on(async move {
-            let resp_data = get_price_feed(id).await;
+            let resp_data = get_price_feed(id).await?;
             println!("resp_data: {:?}", resp_data);
+            serde_json::to_vec(&resp_data).map_err(|e| e.to_string())
+        })?;
 
-            match resp_data {
-                Ok(resp) => {
-                    let output: Vec<u8> = serde_json::to_vec(&resp).unwrap();
-                    Ok(output)
-                }
-                Err(e) => Err(e),
-            }
-        });
-
-        match res {
-            Ok(data) => match dest {
-                Destination::Ethereum => Ok(encode_trigger_output(trigger_id, &data)),
-                Destination::CliOutput => Ok(data),
-            },
-            Err(e) => Err(e),
-        }
+        let output = match dest {
+            Destination::Ethereum => Some(encode_trigger_output(trigger_id, &res)),
+            Destination::CliOutput => Some(res),
+        };
+        Ok(output)
     }
 }
 
@@ -208,9 +199,9 @@ use wstd::{http::HeaderValue, runtime::block_on};
 struct Component;
 export!(Component with_types_in bindings);
 
-// !focus(1:12)
+// !focus(1:11)
 impl Guest for Component {
-    fn run(action: TriggerAction) -> std::result::Result<Vec<u8>, String> {
+    fn run(action: TriggerAction) -> std::result::Result<Option<Vec<u8>>, String> {
         let (trigger_id, req, dest) =
             decode_trigger_event(action.data).map_err(|e| e.to_string())?;
 
@@ -222,25 +213,16 @@ impl Guest for Component {
         let id = id.to_digit(16).ok_or("Invalid hex digit")? as u64;
 
         let res = block_on(async move {
-            let resp_data = get_price_feed(id).await;
+            let resp_data = get_price_feed(id).await?;
             println!("resp_data: {:?}", resp_data);
+            serde_json::to_vec(&resp_data).map_err(|e| e.to_string())
+        })?;
 
-            match resp_data {
-                Ok(resp) => {
-                    let output: Vec<u8> = serde_json::to_vec(&resp).unwrap();
-                    Ok(output)
-                }
-                Err(e) => Err(e),
-            }
-        });
-
-        match res {
-            Ok(data) => match dest {
-                Destination::Ethereum => Ok(encode_trigger_output(trigger_id, &data)),
-                Destination::CliOutput => Ok(data),
-            },
-            Err(e) => Err(e),
-        }
+        let output = match dest {
+            Destination::Ethereum => Some(encode_trigger_output(trigger_id, &res)),
+            Destination::CliOutput => Some(res),
+        };
+        Ok(output)
     }
 }
 ```
@@ -257,27 +239,19 @@ Then, `get_price_feed(id).await` is called to fetch the asset price from CoinMar
         let id = input.chars().next().ok_or("Empty input")?;
         let id = id.to_digit(16).ok_or("Invalid hex digit")? as u64;
 
-// !focus(1:12)
+// !focus(1:4)
         let res = block_on(async move {
-            let resp_data = get_price_feed(id).await;
+            let resp_data = get_price_feed(id).await?;
             println!("resp_data: {:?}", resp_data);
+            serde_json::to_vec(&resp_data).map_err(|e| e.to_string())
+        })?;
 
-            match resp_data {
-                Ok(resp) => {
-                    let output: Vec<u8> = serde_json::to_vec(&resp).unwrap();
-                    Ok(output)
-                }
-                Err(e) => Err(e),
-            }
-        });
 
-        match res {
-            Ok(data) => match dest {
-                Destination::Ethereum => Ok(encode_trigger_output(trigger_id, &data)),
-                Destination::CliOutput => Ok(data),
-            },
-            Err(e) => Err(e),
-        }
+        let output = match dest {
+            Destination::Ethereum => Some(encode_trigger_output(trigger_id, &res)),
+            Destination::CliOutput => Some(res),
+        };
+        Ok(output)
     }
 }
 ```
@@ -290,13 +264,11 @@ The asset ID passed from the trigger is used in the API request to fetch the dat
 The returned price data is then extracted from the response and converted into a structured format.
 
 ```rust ! lib.rs
-        match res {
-            Ok(data) => match dest {
-                Destination::Ethereum => Ok(encode_trigger_output(trigger_id, &data)),
-                Destination::CliOutput => Ok(data),
-            },
-            Err(e) => Err(e),
-        }
+        let output = match dest {
+            Destination::Ethereum => Some(encode_trigger_output(trigger_id, &res)),
+            Destination::CliOutput => Some(res),
+        };
+        Ok(output)
     }
 }
 // !focus(1:18)
@@ -342,14 +314,12 @@ The price data is ready to be passed to the submission contract (also known as t
 ```rust ! lib.rs
 
 
-// !focus(1:7)
-        match res {
-            Ok(data) => match dest {
-                Destination::Ethereum => Ok(encode_trigger_output(trigger_id, &data)),
-                Destination::CliOutput => Ok(data),
-            },
-            Err(e) => Err(e),
-        }
+// !focus(1:5)
+        let output = match dest {
+            Destination::Ethereum => Some(encode_trigger_output(trigger_id, &res)),
+            Destination::CliOutput => Some(res),
+        };
+        Ok(output)
     }
 }
 ```
@@ -366,7 +336,7 @@ For production, you can use a `host::log()` function which takes a `LogLevel` an
 
 ```rust ! lib.rs
 impl Guest for Component {
-    fn run(action: TriggerAction) -> std::result::Result<Vec<u8>, String> {
+    fn run(action: TriggerAction) -> std::result::Result<Option<Vec<u8>>, String> {
         let (trigger_id, req, dest) =
             decode_trigger_event(action.data).map_err(|e| e.to_string())?;
 
@@ -379,18 +349,12 @@ impl Guest for Component {
         let id = id.to_digit(16).ok_or("Invalid hex digit")? as u64;
 
         let res = block_on(async move {
-            let resp_data = get_price_feed(id).await;
-            // !focus(1)
+            let resp_data = get_price_feed(id).await?;
+             // !focus(1)
             println!("resp_data: {:?}", resp_data);
 
-            match resp_data {
-                Ok(resp) => {
-                    let output: Vec<u8> = serde_json::to_vec(&resp).unwrap();
-                    Ok(output)
-                }
-                Err(e) => Err(e),
-            }
-        });
+            serde_json::to_vec(&resp_data).map_err(|e| e.to_string())
+        })?;
 ```
 
 
