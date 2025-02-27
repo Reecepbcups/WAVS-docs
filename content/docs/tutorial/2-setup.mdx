@@ -8,7 +8,7 @@ The following installations are required to run this example. Follow the steps b
 
 <Callout title="System recommendations" type="info">
 
-This tutorial is designed for Linux and macOS systems. Other systems may not be compatible with this guide.
+This tutorial is designed for Windows WSL, Linux, and macOS systems.
 
 </Callout>
 
@@ -57,7 +57,8 @@ rustup target add wasm32-wasip2
 Install the following for building WebAssembly components. Visit the [Cargo Component documentation](https://github.com/bytecodealliance/cargo-component#installation) for more information.
 
 ```bash
-cargo install cargo-component warg-cli wkg --locked
+cargo install cargo-binstall
+cargo binstall cargo-component warg-cli wkg --locked --no-confirm
 
 # Configure default registry
 wkg config --default-registry wa.dev
@@ -84,7 +85,7 @@ foundryup
 
 Visit the [Docker Documentation](https://docs.docker.com/get-started/get-docker/) for more info.
 
-<Tabs groupId="language" items={['MacOS', 'Ubuntu']} persist>
+<Tabs groupId="language" items={['MacOS', 'Linux']} persist>
 
   <Tab value="MacOS">
     ```bash
@@ -92,7 +93,7 @@ Visit the [Docker Documentation](https://docs.docker.com/get-started/get-docker/
     ```
   </Tab>
 
-  <Tab value="Ubuntu">
+  <Tab value="Linux">
 
   The following commands will install Docker and [Docker Compose](https://docs.docker.com/compose/).
 
@@ -126,7 +127,7 @@ If you are running on a Mac with an ARM chip, you will need to do the following:
 
 - Set up Rosetta:
 
-```bash 
+```bash
 softwareupdate --install-rosetta`
 ```
 
@@ -139,7 +140,7 @@ softwareupdate --install-rosetta`
 Visit the [Make Documentation](https://www.gnu.org/software/make/manual/make.html) for more info.
 
 
-<Tabs groupId="language" items={['MacOS', 'Ubuntu']} persist>
+<Tabs groupId="language" items={['MacOS', 'Linux']} persist>
 
   <Tab value="MacOS">
     ```bash
@@ -147,7 +148,7 @@ Visit the [Make Documentation](https://www.gnu.org/software/make/manual/make.htm
     ```
   </Tab>
 
-  <Tab value="Ubuntu">
+  <Tab value="Linux">
     ```bash
     sudo apt -y install make
     ```
@@ -160,7 +161,7 @@ Visit the [Make Documentation](https://www.gnu.org/software/make/manual/make.htm
 
 Visit the [JQ Documentation](https://jqlang.org/download/) for more info.
 
-<Tabs groupId="language" items={['MacOS', 'Ubuntu']} persist>
+<Tabs groupId="language" items={['MacOS', 'Linux']} persist>
 
   <Tab value="MacOS">
     ```bash
@@ -168,7 +169,7 @@ Visit the [JQ Documentation](https://jqlang.org/download/) for more info.
     ```
   </Tab>
 
-  <Tab value="Ubuntu">
+  <Tab value="Linux">
     ```bash
     sudo apt -y install jq
     ```
