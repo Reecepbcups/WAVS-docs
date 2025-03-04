@@ -22,6 +22,10 @@ def main():
     SRC = os.path.join(parent_dir, 'dsource-wavs-foundry-template/docs')
     copy_files(SRC, DEST)
 
+    # save commit to a file for caching in the parent dir
+    with open(os.path.join(parent_dir, 'last_commit_sync.txt'), 'w') as f:
+        f.write(commit)
+
 
 def copy_files(source_dir, destination_dir):
     # Create the destination directory if it doesn't exist
